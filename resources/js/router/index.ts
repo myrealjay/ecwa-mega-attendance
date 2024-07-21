@@ -92,14 +92,7 @@ const router = createRouter({
           if (!sideRoute && !otherRoute) {
             next(from.path);
           }
-
-          let hasRole = isLogedIn.roles.find(item => {
-            let isFound = sideRoute?.roles.find(role => role == item.name) || otherRoute?.roles.find(role => role == item.name);
-            return isFound;
-          });
-          if (!hasRole) {
-            next(from.path);
-          }
+          
           next();
         }
       },

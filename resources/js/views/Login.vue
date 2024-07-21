@@ -117,13 +117,8 @@ export default {
             this.error = "";
             this.makeRequest("POST", this.endpoints.login, {}, this.form)
                 .then((response) => {
-                    if (!response.data.data.is_email_verified) {
-                        this.error =
-                            "Kindly click on the link sent to your email to verify your email";
-                    } else {
-                        this.$store.commit("loginSuccess", response.data.data);
-                        window.location = "/home";
-                    }
+                    this.$store.commit("loginSuccess", response.data.data);
+                    window.location = "/home";
                 })
                 .catch((error) => {
                     if (error.response) {

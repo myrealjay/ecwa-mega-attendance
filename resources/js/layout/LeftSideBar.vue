@@ -32,10 +32,7 @@ export default {
     },
     computed: {
       renderedLinks() {
-        return sideBarRoutes().filter(item => this.user.roles.find(r => {
-          let isFound = item.roles.find(role => role === r.name);
-          return isFound;
-        }));
+        return sideBarRoutes()
       },
       user() {
         return this.$store.state.currentUser;
