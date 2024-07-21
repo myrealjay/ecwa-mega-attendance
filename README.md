@@ -1,3 +1,3 @@
-# Ecwa Youth Quiz
+# Ecwa Mega Follow-Up
 
-This is a Quize App for ECWA Youths
+This is a follow-up application for Ecwa Mega Gbagada
