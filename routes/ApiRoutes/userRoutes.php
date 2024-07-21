@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AgeRestrictionController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
@@ -24,5 +25,9 @@ Route::group(['prefix' => 'auth'], function () {
         Route::post('refresh', [AuthController::class, 'refresh'])->name('refreshToken');
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     });
+});
+
+Route::group(['prefix' => 'users','middleware' => ['auth:sanctum'] ], function() {
+    Route::get('', [UserController::class, 'index'])->name('users');
 });
 
