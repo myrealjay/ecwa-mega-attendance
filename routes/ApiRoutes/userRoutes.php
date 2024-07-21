@@ -12,7 +12,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
  
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [AuthController::class, 'login'])->name('login');
-    Route::post('register', [AuthController::class, 'register'])->name('register');
+    Route::post('register', [AuthController::class, 'register'])->middleware('auth:sanctum')->name('register');
     Route::post('resetlink', [AuthController::class, 'sendResetLink']);
     Route::get('/reset-password/{token}', function ($token) {
         return Redirect::away('/auth/change-password/'.$token);
@@ -20,7 +20,7 @@ Route::group(['prefix' => 'auth'], function () {
 
     Route::post('reset-password', [AuthController::class, 'resetPassword'])->middleware('guest')->name('password.update');
 
-    Route::group(['middleware' => ['auth:sanctum','verified']], function () {
+    Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::post('refresh', [AuthController::class, 'refresh'])->name('refreshToken');
         Route::post('logout', [AuthController::class, 'logout'])->name('logout');
     });
