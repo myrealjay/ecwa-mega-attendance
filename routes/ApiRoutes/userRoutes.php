@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AgeRestrictionController;
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -27,7 +28,12 @@ Route::group(['prefix' => 'auth'], function () {
     });
 });
 
-Route::group(['prefix' => 'users','middleware' => ['auth:sanctum'] ], function() {
+Route::group(['prefix' => 'users', 'middleware' => ['auth:sanctum'] ], function() {
     Route::get('', [UserController::class, 'index'])->name('users');
+});
+
+Route::group(['prefix' => 'attendance', 'middleware' => ['auth:sanctum']], function() {
+    Route::get('', [AttendanceController::class, 'index'])->name('getAttendance');
+    Route::post('', [AttendanceController::class, 'store'])->name('markAttendance');
 });
 
