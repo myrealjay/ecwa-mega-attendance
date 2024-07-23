@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>ECWA LWDYC Bible Quiz</title>
+        <title>ECWA MEGA CHAPEL GBAGADA</title>
 
          <link rel="stylesheet" href="{{ asset('assets/vendors/feather/feather.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendors/ti-icons/css/themify-icons.css') }}">

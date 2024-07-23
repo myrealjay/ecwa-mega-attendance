@@ -7,7 +7,7 @@
                 <div class="col-lg-4 mx-auto">
                     <div class="auth-form-light text-left py-5 px-4 px-sm-5">
                     <div class="brand-logo">
-                        <img src="../assets/images/ecwalogo.jpg" alt="logo" style="width:70px;">
+                        <img src="../assets/images/megalogo.jpg" alt="logo" style="width:70px;">
                     </div>
                     <h4>Hello! Reset your password</h4>
                     <h4 class="error">{{ errors.token ? errors.token[0] : '' }}</h4>

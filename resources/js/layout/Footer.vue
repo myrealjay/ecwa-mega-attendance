@@ -20,7 +20,7 @@
         </div>
         <p>
             &copy; Copyright
-            <span>{{ currentYear }}</span> ECWA LWDYC Bible Quiz
+            <span>{{ currentYear }}</span> ECWA MEGA CHAPEL GBAGADA
         </p>
     </footer>
 </template>

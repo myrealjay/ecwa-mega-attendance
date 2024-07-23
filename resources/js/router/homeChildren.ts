@@ -1,16 +1,21 @@
-import Dashboard from "../views/Dashboard.vue"
+import Dashboard from "../views/Dashboard.vue";
 
 const childRoutes = [
     {
         path: "",
         name: "dashboard",
-        component: Dashboard
-      },
-      {
-        path: "settings",
-        name: "settings",
-        component: () => import("../views/Settings.vue"),
-      }
+        component: Dashboard,
+    },
+    {
+        path: "members",
+        name: "members",
+        component: () => import("../views/Members.vue"),
+    },
+    {
+        path: "attendance",
+        name: "attendance",
+        component: () => import("../views/Attendance.vue"),
+    },
 ];
 
 export function homeChildren() {

@@ -12,7 +12,7 @@
                             >
                                 <div class="brand-logo">
                                     <img
-                                        src="../assets/images/ecwalogo.jpg"
+                                        src="../assets/images/megalogo.jpg"
                                         alt="logo"
                                     />
                                 </div>

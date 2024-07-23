@@ -7,22 +7,28 @@
                     <font-awesome-icon icon="fa-solid fa-hand " class="hand" />
                 </h1>
                 <p>
-                    Take your Bible Quiz with ease, anytime,
-                    <br />
-                    anywhere!
+                    To register a new church member in the portal, please fill
+                    out the required member details in the registration form and
+                    click the 'Submit' button to complete the process.
                 </p>
             </div>
 
             <div class="bible">
-                <img src="../assets/images/bible.jpg" alt="logo" />
+                <img src="../assets/images/church.jpg" alt="logo" />
             </div>
         </div>
         <div class="button-container">
             <Button
-                text="See Quiz"
+                text="ADD MEMBER"
                 color="primary"
-                icon="mdi mdi-eye"
-                @buttonClicked="$router.push({ name: 'myinvitations' })"
+                icon="mdi mdi-plus-circle"
+                @buttonClicked="$router.push({ name: 'register' })"
+            ></Button>
+            <Button
+                text="ADD MESSAGE"
+                color="primary"
+                icon="mdi mdi-plus-box"
+                @buttonClicked="$router.push({ name: 'message' })"
             ></Button>
         </div>
     </div>
