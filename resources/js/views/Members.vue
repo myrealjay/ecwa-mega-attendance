@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h2>Contacts</h2>
+        <h2>LIST OF ALL CHURCH MEMBER</h2>
         <table>
             <thead>
                 <tr>
@@ -172,6 +172,10 @@ export default {
 table {
     width: 100%;
     border-collapse: collapse;
+}
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
 }
 
 th,
