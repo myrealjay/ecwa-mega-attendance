@@ -16,59 +16,29 @@
                                         alt="logo"
                                     />
                                 </div>
-                                <h4>Register Church Member</h4>
+                                <h4>Add Message</h4>
                                 <form class="pt-3">
                                     <TextField
-                                        label="First Name"
-                                        v-model="form.first_name"
+                                        label="Title"
+                                        v-model="form.title"
                                         :error="
-                                            errors.first_name
-                                                ? errors.first_name[0]
-                                                : ''
+                                            errors.title ? errors.title[0] : ''
                                         "
                                     />
 
-                                    <TextField
-                                        label="Last Name"
-                                        v-model="form.last_name"
+                                    <TextAreaField
+                                        label="Message"
+                                        v-model="form.message"
                                         :error="
-                                            errors.last_name
-                                                ? errors.last_name[0]
+                                            errors.message
+                                                ? errors.message[0]
                                                 : ''
                                         "
                                     />
-
-                                    <TextField
-                                        label="Phone Number"
-                                        v-model="form.phone_number"
-                                        :error="
-                                            errors.phone_number
-                                                ? errors.phone_number[0]
-                                                : ''
-                                        "
-                                    />
-                                    <TextField
-                                        label="Home Address"
-                                        v-model="form.address"
-                                        :error="
-                                            errors.address
-                                                ? errors.address[0]
-                                                : ''
-                                        "
-                                    />
-
-                                    <EmailField
-                                        label="Email"
-                                        v-model="form.email"
-                                        :error="
-                                            errors.email ? errors.email[0] : ''
-                                        "
-                                    />
-
-                                    <DateTimeField
-                                        label="DOB"
-                                        v-model="form.dob"
-                                        :error="errors.dob ? errors.dob[0] : ''"
+                                    <Select
+                                        label="Choose an option"
+                                        :options="selectOptions"
+                                        @selection-changed="handleSelection"
                                     />
 
                                     <div class="mt-3">
@@ -99,41 +69,44 @@
                         </div>
                     </div>
                 </div>
-                <!-- content-wrapper ends -->
             </div>
-            <!-- page-body-wrapper ends -->
         </div>
     </div>
 </template>
 
 <script lang="ts">
 import TextField from "../components/TextField.vue";
-import EmailField from "../components/EmailField.vue";
+import TextAreaField from "../components/TextAreaField.vue";
+import Select from "../components/Select.vue";
 
-import DateTimeField from "../components/DateTimeField.vue";
 export default {
     data() {
         return {
             form: {
-                first_name: "",
-                last_name: "",
-                email: "",
-                address: "",
-                dob: "",
-                phone_number: "",
+                title: "",
+                message: "",
+                category: "",
             },
             errors: {},
+            selectOptions: [
+                { text: "Birthday", value: "birthday" },
+                { text: "Absent", value: "absent" },
+                { text: "Present", value: "Present" },
+            ],
         };
     },
     methods: {
+        handleSelection(value) {
+            this.category = value;
+        },
         register() {
             this.errors = {};
             this.showLoader();
-            this.makeRequest("POST", this.endpoints.register, {}, this.form)
+            this.makeRequest("POST", this.endpoints.message, {}, this.form)
                 .then((response) => {
                     this.hideLoader();
                     this.$router.push({
-                        name: "login",
+                        name: "home",
                         query: { action: "new" },
                     });
                 })
@@ -153,10 +126,13 @@ export default {
                 });
         },
     },
-    components: { TextField, EmailField, DateTimeField },
+    components: { TextField, TextAreaField, Select },
 };
 </script>
 <style scoped>
+h4 {
+    text-align: center;
+}
 .container-fluid {
     background: url(../assets/images/ecwa.png);
     background-repeat: no-repeat;
@@ -171,9 +147,6 @@ export default {
 }
 .auth-form-light > h4 {
     font-size: 28px;
-}
-h4 {
-    text-align: center;
 }
 .brand-logo {
     display: flex;
