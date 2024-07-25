@@ -30,5 +30,9 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'bulksmsnigeria' => [
+        'url' => env('SMS_URL', 'https://www.bulksmsnigeria.com/api/v1/sms/create'),
+        'api_token' => env('SMS_API_TOKEN')
+    ]
 
 ];
