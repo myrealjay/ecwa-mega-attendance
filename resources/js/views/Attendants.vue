@@ -1,45 +1,64 @@
 <template>
     <div>
-        <h2>LIST OF ALL CHURCH MEMBER</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Phone Number</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Date of Birth</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(contact, index) in paginatedContacts" :key="index">
-                    <td>{{ contact.name }}</td>
-                    <td>{{ contact.phone }}</td>
-                    <td>{{ contact.email }}</td>
-                    <td>{{ contact.address }}</td>
-                    <td>{{ contact.dob }}</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <div class="pagination">
-            <button
-                @click="prevPage"
-                :disabled="currentPage === 1"
-                class="previous"
-            >
-                Previous
-            </button>
-            <span class="pages"
-                >Page {{ currentPage }} of {{ totalPages }}</span
-            >
-            <button
-                @click="nextPage"
-                :disabled="currentPage === totalPages"
-                class="next"
-            >
-                Next
-            </button>
+        <h2>Attendance by Date</h2>
+        <div>
+            <label for="date-select">Select Date:</label>
+            <select id="date-select" v-model="selectedDate" class="date-select">
+                <option value="" disabled>Select a date</option>
+                <option
+                    v-for="(date, index) in availableDates"
+                    :key="index"
+                    :value="date"
+                >
+                    {{ date }}
+                </option>
+            </select>
+        </div>
+        <div v-if="filteredAttendances.length > 0" class="attendance-list">
+            <h3>Attendances on {{ selectedDate }}:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone Number</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="(contact, index) in paginatedContacts"
+                        :key="index"
+                    >
+                        <td>{{ contact.name }}</td>
+                        <td>{{ contact.phone }}</td>
+                        <td>{{ contact.email }}</td>
+                        <td>{{ contact.address }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination">
+                <button
+                    @click="prevPage"
+                    :disabled="currentPage === 1"
+                    class="previous"
+                >
+                    Previous
+                </button>
+                <span class="pages"
+                    >Page {{ currentPage }} of {{ totalPages }}</span
+                >
+                <button
+                    @click="nextPage"
+                    :disabled="currentPage === totalPages"
+                    class="next"
+                >
+                    Next
+                </button>
+            </div>
+        </div>
+        <div v-else>
+            <p>No attendances recorded for the selected date.</p>
         </div>
     </div>
 </template>
@@ -48,104 +67,105 @@
 export default {
     data() {
         return {
-            contacts: [
+            selectedDate: "",
+            attendances: [
                 {
                     name: "John Doe",
                     phone: "123-456-7890",
                     email: "john@example.com",
                     address: "123 Main St",
-                    dob: "1990-01-01",
+                    attendanceDate: "1990-01-01",
                 },
                 {
                     name: "Jane Smith",
                     phone: "234-567-8901",
                     email: "jane@example.com",
                     address: "456 Elm St",
-                    dob: "1985-05-15",
+                    attendanceDate: "1985-05-15",
                 },
                 {
                     name: "John Doe",
                     phone: "123-456-7890",
                     email: "john@example.com",
                     address: "123 Main St",
-                    dob: "1990-01-01",
+                    attendanceDate: "1990-01-01",
                 },
                 {
                     name: "Jane Smith",
                     phone: "234-567-8901",
                     email: "jane@example.com",
                     address: "456 Elm St",
-                    dob: "1985-05-15",
+                    attendanceDate: "1985-05-15",
                 },
                 {
                     name: "John Doe",
                     phone: "123-456-7890",
                     email: "john@example.com",
                     address: "123 Main St",
-                    dob: "1990-01-01",
+                    attendanceDate: "1990-01-01",
                 },
                 {
                     name: "Jane Smith",
                     phone: "234-567-8901",
                     email: "jane@example.com",
                     address: "456 Elm St",
-                    dob: "1985-05-15",
+                    attendanceDate: "1985-05-15",
                 },
                 {
                     name: "John Doe",
                     phone: "123-456-7890",
                     email: "john@example.com",
                     address: "123 Main St",
-                    dob: "1990-01-01",
+                    attendanceDate: "1990-01-01",
                 },
                 {
                     name: "Jane Smith",
                     phone: "234-567-8901",
                     email: "jane@example.com",
                     address: "456 Elm St",
-                    dob: "1985-05-15",
+                    attendanceDate: "1985-05-15",
                 },
                 {
                     name: "John Doe",
                     phone: "123-456-7890",
                     email: "john@example.com",
                     address: "123 Main St",
-                    dob: "1990-01-01",
+                    attendanceDate: "1990-01-01",
                 },
                 {
                     name: "Jane Smith",
                     phone: "234-567-8901",
                     email: "jane@example.com",
                     address: "456 Elm St",
-                    dob: "1985-05-15",
+                    attendanceDate: "1985-05-15",
                 },
                 {
                     name: "John Doe",
                     phone: "123-456-7890",
                     email: "john@example.com",
                     address: "123 Main St",
-                    dob: "1990-01-01",
+                    attendanceDate: "1990-01-01",
                 },
                 {
                     name: "Jane Smith",
                     phone: "234-567-8901",
                     email: "jane@example.com",
                     address: "456 Elm St",
-                    dob: "1985-05-15",
+                    attendanceDate: "1985-05-15",
                 },
                 {
                     name: "John Doe",
                     phone: "123-456-7890",
                     email: "john@example.com",
                     address: "123 Main St",
-                    dob: "1990-01-01",
+                    attendanceDate: "1990-01-01",
                 },
                 {
                     name: "Jane Smith",
                     phone: "234-567-8901",
                     email: "jane@example.com",
                     address: "456 Elm St",
-                    dob: "1985-05-15",
+                    attendanceDate: "1985-05-15",
                 },
             ],
             currentPage: 1,
@@ -154,11 +174,25 @@ export default {
     },
     computed: {
         totalPages() {
-            return Math.ceil(this.contacts.length / this.pageSize);
+            return Math.ceil(this.filteredAttendances.length / this.pageSize);
         },
         paginatedContacts() {
             const startIndex = (this.currentPage - 1) * this.pageSize;
-            return this.contacts.slice(startIndex, startIndex + this.pageSize);
+            return this.filteredAttendances.slice(
+                startIndex,
+                startIndex + this.pageSize
+            );
+        },
+        availableDates() {
+            // Extract unique dates from the attendances array
+            const dates = this.attendances.map((a) => a.attendanceDate);
+            return [...new Set(dates)]; // Remove duplicates
+        },
+        filteredAttendances() {
+            if (!this.selectedDate) return [];
+            return this.attendances.filter((attendance) => {
+                return attendance.attendanceDate === this.selectedDate;
+            });
         },
     },
     methods: {
@@ -177,6 +211,12 @@ export default {
 </script>
 
 <style>
+.date-select {
+    margin-top: 10px;
+    padding: 5px;
+    font-size: 16px;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
