@@ -31,7 +31,8 @@ class RegisterRequest extends FormRequest
             'address' => ['nullable','string','max:255'],
             'dob' => ['required', 'date'],
             'occupation' => ['nullable', 'string', 'max:255'],
-            'picture' => ['nullable', 'image', 'mimes:jpg,jpeg,png','max:2048']
+            'picture' => ['nullable', 'image', 'mimes:jpg,jpeg,png','max:2048'],
+            'wedding_date' => ['nullable', 'date']
         ];
     }
 

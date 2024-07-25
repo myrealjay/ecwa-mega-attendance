@@ -14,7 +14,12 @@ class TemplateParser
         $description = DB::select("DESCRIBE users");
         foreach($description as $desc) {
             $field = $desc->Field;
-            $replacements["$$field$"] = $user->{$field};
+            if ($field == 'picture') {
+                $replacements["$$field$"] = '<div style="text-align:center;width:100%;"><img src="'. $user->{$field}.'" width="400px;" /></div>';
+            }
+            else {
+                $replacements["$$field$"] = $user->{$field};
+            }
         }
 
         $parsed = strtr($template, $replacements);

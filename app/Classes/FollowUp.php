@@ -74,4 +74,87 @@ class FollowUp
             }
         }
     }
+
+
+    public function celebrateBirthday() : void
+    {
+        $celebrants = User::whereDate('dob', $this->today)->get();
+        $celebrantCategory = EmailCategory::find(4);
+        $birthdayCategory = EmailCategory::find(3);
+        $celebrantTemplate = $celebrantCategory? EmailTemplate::where('email_category_id', $celebrantCategory->id)
+            ->inRandomOrder()->first(): null;
+        $birthdayTemplate = $birthdayCategory? EmailTemplate::where('email_category_id', $birthdayCategory->id)
+            ->inRandomOrder()->first() : null;
+
+        $this->sendCelebrationEmails(
+            $celebrants, 
+            $celebrantCategory, 
+            $birthdayCategory, 
+            $celebrantTemplate, 
+            $birthdayTemplate,
+            'Birthday Celebration'
+        );
+    }
+
+    public function celebrateAnniversary() : void
+    {
+        $celebrants = User::whereDate('wedding_date', $this->today)->get();
+        $celebrantCategory = EmailCategory::find(6);
+        $birthdayCategory = EmailCategory::find(5);
+        $celebrantTemplate = $celebrantCategory? EmailTemplate::where('email_category_id', $celebrantCategory->id)
+            ->inRandomOrder()->first(): null;
+        $birthdayTemplate = $birthdayCategory? EmailTemplate::where('email_category_id', $birthdayCategory->id)
+            ->inRandomOrder()->first() : null;
+
+        $this->sendCelebrationEmails(
+            $celebrants, 
+            $celebrantCategory, 
+            $birthdayCategory, 
+            $celebrantTemplate, 
+            $birthdayTemplate,
+            'Wedding Anniversary'
+        );
+    }
+
+    protected function sendCelebrationEmails(
+        $celebrants,
+        $celebrantCategory, 
+        $birthdayCategory, 
+        $celebrantTemplate, 
+        $birthdayTemplate,
+        $subject
+    ) : void
+    {
+        foreach($celebrants as $celebrant) {
+            $users = User::whereNot('id', $celebrant->id)->get();
+
+            //Send to celebrant
+            if($celebrantCategory) {
+                if ($celebrantTemplate) {
+                    try {
+                        Mail::to($celebrant->email)->send(new FollowUpMail($celebrant, $celebrantTemplate, $subject));
+                    } catch(\Exception $e) {
+                        Log::error($e);
+                    }
+                }
+            }
+
+            //Send to other people
+            if ($birthdayCategory) {
+                if (!$birthdayTemplate) {
+                    continue;
+                }
+
+                foreach($users as $user) {
+                    try {
+                        Mail::to($user->email)->send(new FollowUpMail($celebrant, $birthdayTemplate, $subject));
+                    } catch(\Exception $e) {
+                        Log::error($e);
+                    }
+                }
+
+            }
+            
+        }
+    }
 }

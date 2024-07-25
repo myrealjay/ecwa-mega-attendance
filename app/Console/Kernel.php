@@ -16,6 +16,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('members:followup')->weeklyOn(0, '14:00');
+        $schedule->command('members:birthday')->daily();
     }
 
     /**
