@@ -9,6 +9,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Contracts\Auth\CanResetPassword;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {
@@ -48,18 +49,44 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         return ucwords($this->attributes['first_name'] . ' '.$this->attributes['last_name']);
     }
 
-    public function wallets()
-    {
-        return $this->hasMany(UserWallet::class, 'user_id');
-    }
-
-    public function client()
-    {
-        return $this->hasOne(Client::class, 'user_id');
-    }
-
     public function roles()
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    /**
+     * Get the user's first name.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function firstName() : Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => ucfirst($value),
+        );
+    }
+
+    /**
+     * Get the user's first name.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function lastName(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value, $attributes) => ucfirst($attributes['first_name']).' '.ucfirst($attributes['last_name']),
+        );
+    }
+
+    /**
+     * Get the user's first name.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function fullName(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => ucfirst($value),
+        );
     }
 }

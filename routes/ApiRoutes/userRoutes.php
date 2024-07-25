@@ -3,6 +3,8 @@
 use App\Http\Controllers\AgeRestrictionController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\EmailCategoryController;
+use App\Http\Controllers\EmailTemplateController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
@@ -35,5 +37,19 @@ Route::group(['prefix' => 'users', 'middleware' => ['auth:sanctum'] ], function(
 Route::group(['prefix' => 'attendance', 'middleware' => ['auth:sanctum']], function() {
     Route::get('', [AttendanceController::class, 'index'])->name('getAttendance');
     Route::post('', [AttendanceController::class, 'store'])->name('markAttendance');
+});
+
+Route::group(['prefix' => 'email-categories', 'middleware' => ['auth:sanctum']], function() {
+    Route::get('', [EmailCategoryController::class, 'index'])->name('getCategories');
+    Route::post('', [EmailCategoryController::class, 'store'])->name('storeCategories');
+});
+
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::group(['prefix' => 'email-templates'], function() {
+        Route::get('', [EmailTemplateController::class, 'index'])->name('getTemplates');
+        Route::post('', [EmailTemplateController::class, 'store'])->name('storeTemplates');
+        Route::put('{id}', [EmailTemplateController::class, 'update'])->name('updateTemplates');
+        Route::delete('{id}', [EmailTemplateController::class, 'delete'])->name('deleteTemplates');
+    });
 });
 
