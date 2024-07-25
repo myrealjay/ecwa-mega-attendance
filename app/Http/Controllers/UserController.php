@@ -14,6 +14,8 @@ class UserController extends Controller
     {
         $length = $request->length ?? 10;
         $search = $request->search ?? null;
+        $sort = $request->sort ?? 'first_name';
+        $sortDirection = $request->sort_direction ?? 'ASC';
 
         $users = User::query()->when(!empty($search), function($query) use($search) {
             return $query->where('first_name', 'LIKE', '%'.$search.'%')
@@ -23,7 +25,9 @@ class UserController extends Controller
             ->orWhere('address', 'LIKE', '%'.$search.'%')
             ->orWhere('phone_number', 'LIKE', '%'.$search.'%')
             ->orWhere('dob', 'LIKE', '%'.$search.'%');
-        })->paginate($length);
+        })
+        ->orderBy($sort, $sortDirection)
+        ->paginate($length);
 
         return $this->successResponse('Users fetched successfully', $users);
     }

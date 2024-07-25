@@ -74,8 +74,9 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     protected function lastName(): Attribute
     {
         return Attribute::make(
-            get: fn ($value, $attributes) => ucfirst($attributes['first_name']).' '.ucfirst($attributes['last_name']),
+            get: fn ($value) => ucfirst($value),
         );
+        
     }
 
     /**
@@ -86,7 +87,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     protected function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn ($value) => ucfirst($value),
+            get: fn ($value, $attributes) => ucfirst($attributes['first_name']).' '.ucfirst($attributes['last_name']),
         );
     }
 }
