@@ -13,16 +13,19 @@
                         v-model="selectedContacts"
                         :value="contact"
                     />
-                    {{ contact.name }}
+                    <p>{{ contact.name }}</p>
                 </label>
             </div>
         </div>
-        <button
-            @click="submitAttendance"
-            :disabled="selectedContacts.length === 0"
-        >
-            Submit Attendance
-        </button>
+        <div class="mt-3">
+            <button
+                @click="submitAttendance"
+                :disabled="selectedContacts.length === 0"
+                class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
+            >
+                Submit Attendance
+            </button>
+        </div>
 
         <div v-if="submittedAttendances.length > 0">
             <h3>Submitted Attendances:</h3>
@@ -82,11 +85,10 @@ export default {
         };
     },
     computed: {
-        // Calculate number of grid columns dynamically
         gridColumns() {
             return Math.ceil(this.contacts.length / 20);
         },
-        // Split contacts into grid rows based on gridColumns
+
         gridRows() {
             const rows = [];
             for (let i = 0; i < this.gridColumns; i++) {
@@ -114,7 +116,6 @@ export default {
 </script>
 
 <style>
-/* Add styling as per your preference */
 .grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -129,5 +130,17 @@ export default {
 button {
     margin-top: 10px;
     cursor: pointer;
+}
+label {
+    display: flex;
+    align-items: center;
+}
+label > p {
+    color: #fff;
+    margin-left: 10px;
+    align-self: center;
+}
+input {
+    align-self: center;
 }
 </style>

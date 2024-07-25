@@ -9,6 +9,7 @@ import { sideBarRoutes } from "@/layout/routes";
 import { otherRoutes } from "@/layout/otherRoutes";
 import ForgotPassword from "../views/ForgotPassword.vue";
 import ResetPassword from "../views/ResetPassword.vue";
+import AddMessage from "../views/AddMessage.vue";
 
 const store = appStore();
 
@@ -29,13 +30,26 @@ const router = createRouter({
             },
         },
         {
-            path: "/home/register",
+            path: "/register",
             name: "register",
             component: Register,
             beforeEnter: async (to, from, next) => {
                 const isLogedIn = store.state.currentUser;
-                if (isLogedIn) {
-                    next("/home");
+                if (!isLogedIn) {
+                    next("/");
+                } else {
+                    next();
+                }
+            },
+        },
+        {
+            path: "/add-message",
+            name: "message",
+            component: AddMessage,
+            beforeEnter: async (to, from, next) => {
+                const isLogedIn = store.state.currentUser;
+                if (!isLogedIn) {
+                    next("/");
                 } else {
                     next();
                 }
