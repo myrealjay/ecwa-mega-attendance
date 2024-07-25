@@ -1,27 +1,20 @@
 export function endpoints() {
     return {
         login : "/auth/login",
-        register: "/auth/register",
+        createUser: "/auth/register",
         refreshToken: "/auth/refresh",
         logout: "/auth/logout",
-        AddCategory: '/category',
-        GetCategory: '/category/all',
-        fetchCategories: '/category',
-        addQuiz: '/quiz',
-        getQuiz: '/quiz',
-        addQuestions: '/questions',
-        getQuestions: '/questions',
-        uploadQuestions: '/questions/upload',
-        startQuiz: '/quiz/take',
-        respond: '/quiz/respond',
-        invite:'/quiz/invitation',
-        myinvites: '/quiz/my-invitations',
-        downloadTemplate: '/questions/download',
-        responses: '/responses',
-        deleteQuestions: '/questions/delete',
-        sendResetLink:'/auth/resetlink',
-        resetPassword:'/auth/reset-password',
-        ageRestrictions:'/auth/age-restriction',
-        reset:'/quiz/invitation/reset'
+        getCategories: '/email-categories',
+        fetchAttendanceByDate:'attendance/by-date',
+        takeAttendance:'/attendance',
+        fetchUsers:'/users',
+        createSmsTemplate:'/sms-templates',//Post
+        fetchSmsTemplates:'/sms-templates',//get
+        updateSmsTemplate:'/sms-templates',//put
+        deleteSmsTemplate:'/sms-templates',//delete
+        createEmailTemplate:'/email-templates',//Post
+        fetchEmailTemplates:'/email-templates',//get
+        updateEmailTemplate:'/email-templates',//put
+        deleteEmailTemplate:'/email-templates'//delete
     }
 }
