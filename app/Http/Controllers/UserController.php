@@ -31,4 +31,10 @@ class UserController extends Controller
 
         return $this->successResponse('Users fetched successfully', $users);
     }
+
+    public function getUsers()
+    {
+        $users = User::all();
+        return $this->successResponse('Users fetched successfully', $users);
+    }
 }
