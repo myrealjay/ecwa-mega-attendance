@@ -12,7 +12,10 @@ class RecipientController extends Controller
 
     public function index()
     {
-        return $this->successResponse('Recipients fetched successfully', Recipient::all());
+        return $this->successResponse(
+            'Recipients fetched successfully', 
+            Recipient::with('user:id,first_name,last_name')->get()
+        );
     }
 
     public function store(Request $request)
@@ -28,7 +31,10 @@ class RecipientController extends Controller
             ]);
         }
 
-        return $this->successResponse('Recipients added successfully', Recipient::all());
+        return $this->successResponse(
+            'Recipients added successfully', 
+            Recipient::with('user:id,first_name,last_name')->get()
+        );
     }
 
     public function delete(Request $request)
@@ -40,6 +46,9 @@ class RecipientController extends Controller
 
         Recipient::whereIn('id', $request->users)->delete();
 
-        return $this->successResponse('Recipients removed successfully', Recipient::all());
+        return $this->successResponse(
+            'Recipients removed successfully', 
+            Recipient::with('user:id,first_name,last_name')->get()
+        );
     }
 }

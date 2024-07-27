@@ -30,6 +30,6 @@ class FollowUp extends Command
     {
         $followUp = new MyFollowUp();
         $followUp->checkUpOnAbsentPeople();
-        $followUp->congratulatePresentPeople();
+        //$followUp->congratulatePresentPeople();
     }
 }
