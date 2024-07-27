@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EmailMessage;
 use App\Models\EmailTemplate;
 use App\Traits\HasResponse;
 use Illuminate\Http\Request;
@@ -57,5 +58,20 @@ class EmailTemplateController extends Controller
     {
         EmailTemplate::where('id', $id)->delete();
         return $this->successResponse('Email template deleted successfully', []);
+    }
+
+    public function getEmails(Request $request)
+    {
+        $length = $request->length ?? 10;
+        $date = $request->date ?? null;
+
+        if ($date) {
+            $date = date('Y-m-d', strtotime($date));
+        }
+        $emails = EmailMessage::query()->when(!empty($date), function($query) use($date) {
+            return $query->whereDate('created_at', $date);
+        })->paginate($length);
+
+        return $this->successResponse('Emails fetched successfully', $emails);
     }
 }

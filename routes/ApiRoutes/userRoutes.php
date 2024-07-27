@@ -68,5 +68,7 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
         Route::post('', [RecipientController::class, 'store'])->name('storeRecipients');
         Route::post('remove', [RecipientController::class, 'delete'])->name('deleteRecipients');
     });
+
+    Route::get('emails', [EmailTemplateController::class, 'getEmails'])->name('getEmails');
 });
 

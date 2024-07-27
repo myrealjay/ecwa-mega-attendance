@@ -72,7 +72,6 @@ class FollowUp
         
         $recipients = Recipient::with('user')->get();
         foreach($recipients as $recipient) {
-            dump('notifying');
             try {
                 Mail::to($recipient->user->email)->send(new RecipientMail($data, $recipient->user));
             } catch(\Exception $e) {
