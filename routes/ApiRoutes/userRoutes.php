@@ -70,5 +70,6 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     });
 
     Route::get('emails', [EmailTemplateController::class, 'getEmails'])->name('getEmails');
+    Route::post('sms', [EmailTemplateController::class, 'smsWebhook']);
 });
 

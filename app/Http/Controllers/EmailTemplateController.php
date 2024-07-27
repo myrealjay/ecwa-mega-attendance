@@ -6,6 +6,7 @@ use App\Models\EmailMessage;
 use App\Models\EmailTemplate;
 use App\Traits\HasResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class EmailTemplateController extends Controller
 {
@@ -73,5 +74,10 @@ class EmailTemplateController extends Controller
         })->paginate($length);
 
         return $this->successResponse('Emails fetched successfully', $emails);
+    }
+
+    public function smsWebhook(Request $request) 
+    {
+        Log::info($request->all());
     }
 }

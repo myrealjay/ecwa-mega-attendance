@@ -17,7 +17,8 @@ class SmsSender
             'from' => 'BulkSMS.ng',
             'to' => $phones,
             'dnd' => 2,
-            'body' => $body
+            'body' => $body,
+            'callback_url' => config('app.url')."/sms"
         ];
 
         Log::info('Sending SMS to '.$phones);
