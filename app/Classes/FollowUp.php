@@ -3,9 +3,11 @@
 namespace App\Classes;
 
 use App\Mail\FollowUpMail;
+use App\Mail\RecipientMail;
 use App\Models\Attendance;
 use App\Models\EmailCategory;
 use App\Models\EmailTemplate;
+use App\Models\Recipient;
 use App\Models\SmsTemplate;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
@@ -55,6 +57,27 @@ class FollowUp
                 }
             }
            
+        }
+
+       $this->notifyRecipients($absentPeople);
+    }
+
+    protected function notifyRecipients($absentPeople)
+    {
+        $data = "<ul>";
+        foreach($absentPeople as $absentPerson) {
+            $data .= "<li>{$absentPerson->name} {$absentPerson->phone_number} {$absentPerson->email}</li>";
+        }
+        $data .= "</ul>";
+        
+        $recipients = Recipient::with('user')->get();
+        foreach($recipients as $recipient) {
+            dump('notifying');
+            try {
+                Mail::to($recipient->user->email)->send(new RecipientMail($data, $recipient->user));
+            } catch(\Exception $e) {
+                Log::error($e);
+            }
         }
     }
 
