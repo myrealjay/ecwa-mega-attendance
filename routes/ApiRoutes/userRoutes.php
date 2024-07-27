@@ -5,6 +5,7 @@ use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmailCategoryController;
 use App\Http\Controllers\EmailTemplateController;
+use App\Http\Controllers\RecipientController;
 use App\Http\Controllers\SmsTemplateController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -60,6 +61,12 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
         Route::post('', [SmsTemplateController::class, 'store'])->name('storeTemplates');
         Route::put('{id}', [SmsTemplateController::class, 'update'])->name('updateTemplates');
         Route::delete('{id}', [SmsTemplateController::class, 'delete'])->name('deleteTemplates');
+    });
+
+    Route::group(['prefix' => 'recipients'], function() {
+        Route::get('', [RecipientController::class, 'index'])->name('getRecipients');
+        Route::post('', [RecipientController::class, 'store'])->name('storeRecipients');
+        Route::post('remove', [RecipientController::class, 'delete'])->name('deleteRecipients');
     });
 });
 
