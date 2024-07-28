@@ -1,6 +1,7 @@
 <?php
 namespace App\Classes;
 
+use App\Models\SmsMessage;
 use App\Models\SmsTemplate;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
@@ -12,13 +13,21 @@ class SmsSender
     {
         $body = (new TemplateParser())->parse($template->template, $user);
         $phones = implode(",", $phoneNumbers);
+
+        $sms = SmsMessage::create([
+            'phone_number' => $phones,
+            'status' => 'Pending',
+            'content' => $body
+        ]);
+        
         $data = [
             'api_token' => config('services.bulksmsnigeria.api_token'),
             'from' => 'BulkSMS.ng',
             'to' => $phones,
-            'dnd' => 2,
+            "gateway" => "direct-refund",
             'body' => $body,
-            'callback_url' => config('app.url')."/sms"
+            "customer_reference" => $sms->id,
+            'callback_url' => 'https://webhook.site/4abdd5cc-5128-45a8-9f77-bb0ce80213f9' //config('app.url')."/sms"
         ];
 
         Log::info('Sending SMS to '.$phones);
