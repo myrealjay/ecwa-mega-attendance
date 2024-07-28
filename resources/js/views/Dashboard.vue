@@ -48,6 +48,9 @@ export default {
             return this.$store.state.currentUser;
         },
     },
+    created() {
+        this.$store.dispatch("fetchContactData");
+    },
 };
 </script>
 <style scoped>

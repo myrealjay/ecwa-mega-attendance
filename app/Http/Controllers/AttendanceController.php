@@ -18,7 +18,7 @@ class AttendanceController extends Controller
         $request->validate(['date' => ['required', 'date']]);
         $length = $request->length ?? 20;
 
-        $attendance = Attendance::whereDate('date', date('Y-m-d', strtotime($request->date)))->paginate($length);
+        $attendance = Attendance::with('user')->whereDate('date', date('Y-m-d', strtotime($request->date)))->get();
 
         return $this->successResponse(
             'Attendance fetched successfully', 

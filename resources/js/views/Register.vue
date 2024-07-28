@@ -129,11 +129,11 @@ export default {
         register() {
             this.errors = {};
             this.showLoader();
-            this.makeRequest("POST", this.endpoints.register, {}, this.form)
+            this.makeRequest("POST", this.endpoints.createUser, {}, this.form)
                 .then((response) => {
                     this.hideLoader();
                     this.$router.push({
-                        name: "login",
+                        name: "dashboard",
                         query: { action: "new" },
                     });
                 })

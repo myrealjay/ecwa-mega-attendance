@@ -4,7 +4,7 @@
         <div class="grid-container">
             <div
                 class="grid-item"
-                v-for="(contact, index) in contacts"
+                v-for="(contact, index) in contactData"
                 :key="index"
             >
                 <label>
@@ -34,7 +34,8 @@
                     v-for="(attendance, index) in submittedAttendances"
                     :key="index"
                 >
-                    {{ attendance.name }} - {{ attendance.attendanceDate }}
+                    <!-- {{ attendance.name }} - {{ attendance.phoneNumber }} -
+                    {{ attendance.email }} - {{ attendance.attendanceDate }} -->
                 </li>
             </ul>
         </div>
@@ -42,49 +43,16 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
     data() {
         return {
-            contacts: [
-                { name: "John Doe", id: 1 },
-                { name: "Jane Smith", id: 2 },
-                { name: "Alice Johnson", id: 3 },
-                { name: "John Doe", id: 4 },
-                { name: "Jane Smith", id: 5 },
-                { name: "Alice Johnson", id: 6 },
-                { name: "John Doe", id: 7 },
-                { name: "Jane Smith", id: 8 },
-                { name: "Alice Johnson", id: 9 },
-                { name: "John Doe", id: 10 },
-                { name: "Jane Smith", id: 11 },
-                { name: "Alice Johnson", id: 12 },
-                { name: "John Doe", id: 13 },
-                { name: "Jane Smith", id: 14 },
-                { name: "Alice Johnson", id: 15 },
-                { name: "John Doe", id: 16 },
-                { name: "Jane Smith", id: 17 },
-                { name: "Alice Johnson", id: 18 },
-                { name: "John Doe", id: 19 },
-                { name: "Jane Smith", id: 20 },
-                { name: "Alice Johnson", id: 21 },
-                { name: "John Doe", id: 22 },
-                { name: "Jane Smith", id: 23 },
-                { name: "Alice Johnson", id: 24 },
-                { name: "John Doe", id: 25 },
-                { name: "Jane Smith", id: 26 },
-                { name: "Alice Johnson", id: 27 },
-                { name: "John Doe", id: 28 },
-                { name: "Jane Smith", id: 29 },
-                { name: "Alice Johnson", id: 30 },
-                { name: "John Doe", id: 31 },
-                { name: "Jane Smith", id: 32 },
-                { name: "Alice Johnson", id: 33 },
-            ],
             selectedContacts: [],
             submittedAttendances: [],
         };
     },
     computed: {
+        ...mapState(["contactData"]),
         gridColumns() {
             return Math.ceil(this.contacts.length / 20);
         },
@@ -99,17 +67,41 @@ export default {
     },
     methods: {
         submitAttendance() {
+            let record = [];
             // Create attendance records for selected contacts
             this.selectedContacts.forEach((contact) => {
-                const attendanceRecord = {
-                    name: contact.name,
-                    attendanceDate: new Date().toLocaleDateString(),
-                };
-                this.submittedAttendances.push(attendanceRecord);
+                record.push(contact.id);
             });
 
-            // Clear selected contacts after submission
-            this.selectedContacts = [];
+            this.errors = {};
+            this.showLoader();
+            this.makeRequest(
+                "POST",
+                this.endpoints.takeAttendance,
+                {},
+                { users: record }
+            )
+                .then((response) => {
+                    this.hideLoader();
+                    this.$router.push({
+                        name: "dashboard",
+                        query: { action: "new" },
+                    });
+                })
+                .catch((error) => {
+                    this.hideLoader();
+                    if (error.response) {
+                        if (!error.response.data.data) {
+                            this.sweetAlert().error(
+                                error.response.data.message
+                            );
+                        } else {
+                            this.errors = error.response.data.data;
+                        }
+                    } else {
+                        this.sweetAlert().error(error);
+                    }
+                });
         },
     },
 };
