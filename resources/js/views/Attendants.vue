@@ -3,16 +3,12 @@
         <h2>Attendance by Date</h2>
         <div>
             <label for="date-select">Select Date:</label>
-            <select id="date-select" v-model="selectedDate" class="date-select">
-                <option value="" disabled>Select a date</option>
-                <option
-                    v-for="(date, index) in availableDates"
-                    :key="index"
-                    :value="date"
-                >
-                    {{ date }}
-                </option>
-            </select>
+            <input
+                id="date-select"
+                type="date"
+                v-model="selectedDate"
+                class="date-select"
+            />
         </div>
         <div v-if="filteredAttendances.length > 0" class="attendance-list">
             <h3>Attendances on {{ selectedDate }}:</h3>
@@ -64,115 +60,17 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 export default {
     data() {
         return {
             selectedDate: "",
-            attendances: [
-                {
-                    name: "John Doe",
-                    phone: "123-456-7890",
-                    email: "john@example.com",
-                    address: "123 Main St",
-                    attendanceDate: "1990-01-01",
-                },
-                {
-                    name: "Jane Smith",
-                    phone: "234-567-8901",
-                    email: "jane@example.com",
-                    address: "456 Elm St",
-                    attendanceDate: "1985-05-15",
-                },
-                {
-                    name: "John Doe",
-                    phone: "123-456-7890",
-                    email: "john@example.com",
-                    address: "123 Main St",
-                    attendanceDate: "1990-01-01",
-                },
-                {
-                    name: "Jane Smith",
-                    phone: "234-567-8901",
-                    email: "jane@example.com",
-                    address: "456 Elm St",
-                    attendanceDate: "1985-05-15",
-                },
-                {
-                    name: "John Doe",
-                    phone: "123-456-7890",
-                    email: "john@example.com",
-                    address: "123 Main St",
-                    attendanceDate: "1990-01-01",
-                },
-                {
-                    name: "Jane Smith",
-                    phone: "234-567-8901",
-                    email: "jane@example.com",
-                    address: "456 Elm St",
-                    attendanceDate: "1985-05-15",
-                },
-                {
-                    name: "John Doe",
-                    phone: "123-456-7890",
-                    email: "john@example.com",
-                    address: "123 Main St",
-                    attendanceDate: "1990-01-01",
-                },
-                {
-                    name: "Jane Smith",
-                    phone: "234-567-8901",
-                    email: "jane@example.com",
-                    address: "456 Elm St",
-                    attendanceDate: "1985-05-15",
-                },
-                {
-                    name: "John Doe",
-                    phone: "123-456-7890",
-                    email: "john@example.com",
-                    address: "123 Main St",
-                    attendanceDate: "1990-01-01",
-                },
-                {
-                    name: "Jane Smith",
-                    phone: "234-567-8901",
-                    email: "jane@example.com",
-                    address: "456 Elm St",
-                    attendanceDate: "1985-05-15",
-                },
-                {
-                    name: "John Doe",
-                    phone: "123-456-7890",
-                    email: "john@example.com",
-                    address: "123 Main St",
-                    attendanceDate: "1990-01-01",
-                },
-                {
-                    name: "Jane Smith",
-                    phone: "234-567-8901",
-                    email: "jane@example.com",
-                    address: "456 Elm St",
-                    attendanceDate: "1985-05-15",
-                },
-                {
-                    name: "John Doe",
-                    phone: "123-456-7890",
-                    email: "john@example.com",
-                    address: "123 Main St",
-                    attendanceDate: "1990-01-01",
-                },
-                {
-                    name: "Jane Smith",
-                    phone: "234-567-8901",
-                    email: "jane@example.com",
-                    address: "456 Elm St",
-                    attendanceDate: "1985-05-15",
-                },
-            ],
             currentPage: 1,
             pageSize: 10,
         };
     },
     computed: {
+        ...mapState(["attendantData"]),
         totalPages() {
             return Math.ceil(this.filteredAttendances.length / this.pageSize);
         },
@@ -184,18 +82,30 @@ export default {
             );
         },
         availableDates() {
-            // Extract unique dates from the attendances array
-            const dates = this.attendances.map((a) => a.attendanceDate);
-            return [...new Set(dates)]; // Remove duplicates
+            return Object.keys(this.attendantData || {});
         },
         filteredAttendances() {
-            if (!this.selectedDate) return [];
-            return this.attendances.filter((attendance) => {
-                return attendance.attendanceDate === this.selectedDate;
-            });
+            // Ensure that attendantData and the specific date entry exist
+            if (
+                !this.selectedDate ||
+                !this.attendantData ||
+                !this.attendantData[this.selectedDate]
+            ) {
+                return [];
+            }
+            const { present } = this.attendantData[this.selectedDate];
+            return present
+                ? present.map((p) => ({ ...p, status: "Present" }))
+                : [];
         },
     },
     methods: {
+        ...mapActions(["fetchAttendantData"]),
+        fetchDataByDate() {
+            if (this.selectedDate) {
+                this.fetchAttendantData({ date: this.selectedDate });
+            }
+        },
         nextPage() {
             if (this.currentPage < this.totalPages) {
                 this.currentPage++;
@@ -206,6 +116,16 @@ export default {
                 this.currentPage--;
             }
         },
+    },
+    watch: {
+        selectedDate(newDate) {
+            this.fetchDataByDate();
+        },
+    },
+    mounted() {
+        if (this.selectedDate) {
+            this.fetchDataByDate();
+        }
     },
 };
 </script>

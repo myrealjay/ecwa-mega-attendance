@@ -10,6 +10,7 @@ const store = createStore({
         return {
             currentUser: fetchLogedInUser(),
             contactData: [],
+            attendantData: {}, // Updated to be an object to store date-based data
         };
     },
     mutations: {
@@ -33,28 +34,29 @@ const store = createStore({
             sessionStorage.setItem("contactData", contacts);
             console.log(contacts);
         },
+        setAttendantData(state, payload) {
+            console.log("Received attendant data:", payload);
+
+            state.attendantData = payload;
+            const attendants = JSON.stringify(state.attendantData);
+            sessionStorage.setItem("attendantData", attendants);
+            console.log("Updated state.attendantData:", state.attendantData);
+        },
     },
     getters: {
         isLogedIn(state) {
-            if (!state.currentUser) {
-                return false;
-            }
-            return true;
+            return !!state.currentUser;
         },
         shouldRefresh(state) {
-            if (!state.currentUser) {
-                return false;
-            }
+            if (!state.currentUser) return false;
             let expiryTime = moment(state.currentUser.expiry).subtract(
                 4,
                 "minute"
             );
-            if (moment().isAfter(expiryTime)) {
-                return true;
-            }
-            return false;
+            return moment().isAfter(expiryTime);
         },
         contactData: (state) => state.contactData,
+        attendantData: (state) => state.attendantData,
     },
     actions: {
         async refreshToken(context) {
@@ -63,10 +65,8 @@ const store = createStore({
                     context.commit("loginSuccess", response.data.data);
                 })
                 .catch((error) => {
-                    if (error.response) {
-                        if (error.response.status === 401) {
-                            context.commit("logout");
-                        }
+                    if (error.response && error.response.status === 401) {
+                        context.commit("logout");
                     }
                 });
         },
@@ -77,7 +77,9 @@ const store = createStore({
                         context.commit("fetchQuizCategory", response.data.data);
                         resolve("");
                     })
-                    .catch((error) => {});
+                    .catch((error) => {
+                        reject(error);
+                    });
             });
         },
         fetchContactData(context) {
@@ -85,10 +87,33 @@ const store = createStore({
                 makeRequest("GET", endpoints().fetchAllUsers)
                     .then((response) => {
                         context.commit("setContactData", response.data.data);
-
                         resolve("");
                     })
-                    .catch((error) => {});
+                    .catch((error) => {
+                        reject(error);
+                    });
+            });
+        },
+        fetchAttendantData({ commit }, { date }) {
+            return new Promise((resolve, reject) => {
+                const url = `${endpoints().fetchAttendanceByDate}?date=${date}`;
+                makeRequest("GET", url)
+                    .then((response) => {
+                        console.log("API response:", response);
+                        if (response && response.data) {
+                            commit("setAttendantData", response.data.data);
+                        } else {
+                            console.error(
+                                "Unexpected response format:",
+                                response
+                            );
+                        }
+                        resolve("");
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching attendance data:", error);
+                        reject(error);
+                    });
             });
         },
     },

@@ -1,21 +1,19 @@
 <template>
+    <div class="container-scroller">
+        <TopNavBar />
 
-<div class="container-scroller">
-   <TopNavBar />
+        <div class="container-fluid page-body-wrapper">
+            <RightSideBar />
+            <LeftSideBar />
 
-    <div class="container-fluid page-body-wrapper">
-      <RightSideBar />
-      <LeftSideBar />
-
-      <div class="main-panel">
-        <div class="content-wrapper">
-            <RouterView />
+            <div class="main-panel">
+                <div class="content-wrapper">
+                    <RouterView />
+                </div>
+                <Footer />
+            </div>
         </div>
-        <Footer />
-      </div>
     </div>
-    
-  </div>
 </template>
 
 <script lang="ts">
@@ -28,13 +26,10 @@ import Skins from "../layout/Skins.vue";
 export default {
     components: { TopNavBar, RightSideBar, LeftSideBar, Footer, Skins },
     created() {
-      this.$store.dispatch('fetchCategory').then(() => {
-        
-      });
-    }
-}
+        this.$store.dispatch("fetchCategory").then(() => {});
+        this.$store.dispatch("fetchContactData");
+    },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
