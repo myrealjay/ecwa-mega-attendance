@@ -22,6 +22,21 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 
 import "./assets/main.css";
+import 'tinymce/tinymce';
+import 'tinymce/icons/default';
+import 'tinymce/themes/silver';
+import 'tinymce/plugins/advlist';
+import 'tinymce/plugins/autolink';
+import 'tinymce/plugins/lists';
+import 'tinymce/plugins/link';
+import 'tinymce/plugins/image';
+import 'tinymce/plugins/charmap';
+import 'tinymce/plugins/print';
+import 'tinymce/plugins/preview';
+import 'tinymce/plugins/anchor';
+
+import 'tinymce/skins/ui/oxide/skin.min.css';
+import 'tinymce/skins/ui/oxide/content.min.css';
 
 import App from "./App.vue";
 library.add(faTwitter, faFacebook, faYoutube, faInstagram, faHand);
