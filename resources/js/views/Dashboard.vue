@@ -47,6 +47,10 @@
         >
 
             <div>
+                <div>
+                    <b>You can user any of these attributes</b><br>{{ getAttributes() }}
+                </div>
+                <div class="line"></div>
                 <SingleSelect 
                 :options="categories" 
                 custom_value="id" v-model="emailTemplate.email_category_id"
@@ -93,6 +97,12 @@ import Editor from '@tinymce/tinymce-vue'
 export default {
     components: { Button, Modal , SingleSelect, 'editor': Editor},
     mounted() {
+        this.makeRequest('GET', this.endpoints.userStructre).then(response => {
+            this.userStructre = response.data.data;
+        }).catch(error => {
+            console.log(error.response.data)
+        })
+
         this.makeRequest('GET', this.endpoints.getCategories)
         .then(response => {
             this.categories = response.data.data;
@@ -107,10 +117,19 @@ export default {
             emailTemplate:{
                 email_category_id:'',
                 template:''
-            }
+            },
+            userStructre:{}
         };
     },
     methods: {
+        getAttributes() {
+            let attributes = '';
+            for(let value in this.myUserStructure) {
+                attributes += `$${value}$ , `;
+            }
+
+            return attributes;
+        },
         showEmailTemplateModal() {
             this.emailTemplateOpen = true
         },
@@ -133,6 +152,9 @@ export default {
 
     },
     computed: {
+        myUserStructure() {
+            return this.userStructre
+        },
         currentUser() {
             return this.$store.state.currentUser;
         },
@@ -151,6 +173,11 @@ export default {
     color: #fff;
     border-radius: 16px;
     margin-bottom: 20px;
+}
+.line {
+    height: 5px;
+    background-color: #073883;
+    margin-bottom: 15px;
 }
 .board_upper > div > h1 {
     text-align: left;

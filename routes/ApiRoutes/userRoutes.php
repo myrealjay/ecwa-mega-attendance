@@ -35,6 +35,7 @@ Route::group(['prefix' => 'auth'], function () {
 Route::group(['prefix' => 'users', 'middleware' => ['auth:sanctum'] ], function() {
     Route::get('', [UserController::class, 'index'])->name('users');
     Route::get('all', [UserController::class, 'getUsers'])->name('allUsers');
+    Route::get('structure',  [UserController::class, 'getUserStructure']);
     Route::get('{id}', [UserController::class, 'show'])->name('getSingleUser');
 });
 
