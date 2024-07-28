@@ -14,7 +14,7 @@
             <tbody>
                 <tr v-for="(contact, index) in paginatedContacts" :key="index">
                     <td>{{ contact.name }}</td>
-                    <td>{{ contact.phone }}</td>
+                    <td>{{ contact.phone_number }}</td>
                     <td>{{ contact.email }}</td>
                     <td>{{ contact.address }}</td>
                     <td>{{ contact.dob }}</td>
@@ -45,122 +45,28 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
     data() {
         return {
-            contacts: [
-                {
-                    name: "John Doe",
-                    phone: "123-456-7890",
-                    email: "john@example.com",
-                    address: "123 Main St",
-                    dob: "1990-01-01",
-                },
-                {
-                    name: "Jane Smith",
-                    phone: "234-567-8901",
-                    email: "jane@example.com",
-                    address: "456 Elm St",
-                    dob: "1985-05-15",
-                },
-                {
-                    name: "John Doe",
-                    phone: "123-456-7890",
-                    email: "john@example.com",
-                    address: "123 Main St",
-                    dob: "1990-01-01",
-                },
-                {
-                    name: "Jane Smith",
-                    phone: "234-567-8901",
-                    email: "jane@example.com",
-                    address: "456 Elm St",
-                    dob: "1985-05-15",
-                },
-                {
-                    name: "John Doe",
-                    phone: "123-456-7890",
-                    email: "john@example.com",
-                    address: "123 Main St",
-                    dob: "1990-01-01",
-                },
-                {
-                    name: "Jane Smith",
-                    phone: "234-567-8901",
-                    email: "jane@example.com",
-                    address: "456 Elm St",
-                    dob: "1985-05-15",
-                },
-                {
-                    name: "John Doe",
-                    phone: "123-456-7890",
-                    email: "john@example.com",
-                    address: "123 Main St",
-                    dob: "1990-01-01",
-                },
-                {
-                    name: "Jane Smith",
-                    phone: "234-567-8901",
-                    email: "jane@example.com",
-                    address: "456 Elm St",
-                    dob: "1985-05-15",
-                },
-                {
-                    name: "John Doe",
-                    phone: "123-456-7890",
-                    email: "john@example.com",
-                    address: "123 Main St",
-                    dob: "1990-01-01",
-                },
-                {
-                    name: "Jane Smith",
-                    phone: "234-567-8901",
-                    email: "jane@example.com",
-                    address: "456 Elm St",
-                    dob: "1985-05-15",
-                },
-                {
-                    name: "John Doe",
-                    phone: "123-456-7890",
-                    email: "john@example.com",
-                    address: "123 Main St",
-                    dob: "1990-01-01",
-                },
-                {
-                    name: "Jane Smith",
-                    phone: "234-567-8901",
-                    email: "jane@example.com",
-                    address: "456 Elm St",
-                    dob: "1985-05-15",
-                },
-                {
-                    name: "John Doe",
-                    phone: "123-456-7890",
-                    email: "john@example.com",
-                    address: "123 Main St",
-                    dob: "1990-01-01",
-                },
-                {
-                    name: "Jane Smith",
-                    phone: "234-567-8901",
-                    email: "jane@example.com",
-                    address: "456 Elm St",
-                    dob: "1985-05-15",
-                },
-            ],
             currentPage: 1,
             pageSize: 10,
         };
     },
     computed: {
         totalPages() {
-            return Math.ceil(this.contacts.length / this.pageSize);
+            return Math.ceil(this.contactData.length / this.pageSize);
         },
         paginatedContacts() {
             const startIndex = (this.currentPage - 1) * this.pageSize;
-            return this.contacts.slice(startIndex, startIndex + this.pageSize);
+            return this.contactData.slice(
+                startIndex,
+                startIndex + this.pageSize
+            );
         },
+        ...mapState(["contactData"]),
     },
+
     methods: {
         nextPage() {
             if (this.currentPage < this.totalPages) {
