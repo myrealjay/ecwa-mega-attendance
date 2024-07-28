@@ -32,6 +32,17 @@ class UserController extends Controller
         return $this->successResponse('Users fetched successfully', $users);
     }
 
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        return $this->successResponse('User fetched successfully', $user);
+    }
+
+    public function getUserStructure()
+    {
+        return $this->successResponse('User fetched', User::first());
+    }
+
     public function getUsers()
     {
         $users = User::all();

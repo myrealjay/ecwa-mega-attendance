@@ -17,5 +17,6 @@ export function endpoints() {
         fetchEmailTemplates: "/email-templates", //get
         updateEmailTemplate: "/email-templates", //put
         deleteEmailTemplate: "/email-templates", //delete
+        userStructre: "/users/structure"
     };
 }

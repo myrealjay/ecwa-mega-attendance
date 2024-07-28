@@ -20,30 +20,141 @@
         <div class="button-container">
             <Button
                 text="ADD MEMBER"
-                color="primary"
+                color="success"
                 icon="mdi mdi-plus-circle"
                 @buttonClicked="$router.push({ name: 'register' })"
             ></Button>
             <Button
-                text="ADD MESSAGE"
-                color="primary"
+                text="ADD SMS TEMPLATE"
+                color="secondary"
                 icon="mdi mdi-plus-box"
                 @buttonClicked="$router.push({ name: 'message' })"
             ></Button>
+
+            <Button
+                text="ADD EMAIL TEMPLATE"
+                color="info"
+                icon="mdi mdi-plus-box"
+                @buttonClicked="showEmailTemplateModal()"
+            ></Button>
         </div>
+
+        <Modal id="addEmailTemplate" 
+            title="Add Email template" 
+            :open="emailTemplateOpen"
+            @closed="emailTemplateOpen = false"
+            :large="true"
+        >
+
+            <div>
+                <div>
+                    <b>You can user any of these attributes</b><br>{{ getAttributes() }}
+                </div>
+                <div class="line"></div>
+                <SingleSelect 
+                :options="categories" 
+                custom_value="id" v-model="emailTemplate.email_category_id"
+                text="name"
+                label="Category"
+                ></SingleSelect>
+
+                <editor
+                    :init="{
+                        height: 300,
+                        menubar: false,
+                        plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'media table paste code help wordcount'
+                        ],
+                        toolbar:
+                        'undo redo | formatselect | bold italic backcolor | \
+                        alignleft aligncenter alignright alignjustify | \
+                        bullist numlist outdent indent | removeformat | help'
+                    }"
+
+                    v-model="emailTemplate.template"
+                />
+            </div>
+            <template #buttons>
+                <Button icon="mdi-book" 
+                    text="Submit Template" 
+                    color="primary"
+                    @buttonClicked="addEmailTemplate()" 
+                />
+            </template>
+        </Modal>
+
     </div>
 </template>
 
 <script lang="ts">
 import Button from "../components/Button.vue";
+import Modal from "../components/Modal.vue"
+import SingleSelect from "../components/SingleSelect.vue";
+import Editor from '@tinymce/tinymce-vue'
+
 export default {
-    components: { Button },
-    mounted() {},
-    data() {
-        return {};
+    components: { Button, Modal , SingleSelect, 'editor': Editor},
+    mounted() {
+        this.makeRequest('GET', this.endpoints.userStructre).then(response => {
+            this.userStructre = response.data.data;
+        }).catch(error => {
+            console.log(error.response.data)
+        })
+
+        this.makeRequest('GET', this.endpoints.getCategories)
+        .then(response => {
+            this.categories = response.data.data;
+        }).catch(error => {
+            console.log(error.response)
+        })
     },
-    methods: {},
+    data() {
+        return {
+            emailTemplateOpen: false,
+            categories:[],
+            emailTemplate:{
+                email_category_id:'',
+                template:''
+            },
+            userStructre:{}
+        };
+    },
+    methods: {
+        getAttributes() {
+            let attributes = '';
+            for(let value in this.myUserStructure) {
+                attributes += `$${value}$ , `;
+            }
+
+            return attributes;
+        },
+        showEmailTemplateModal() {
+            this.emailTemplateOpen = true
+        },
+        addEmailTemplate() {
+            this.showLoader();
+            this.makeRequest('POST', this.endpoints.createEmailTemplate, this.emailTemplate).then(response => {
+                this.sweetAlert().success('Email template successfully saved');
+                this.emailTemplateOpen = false;
+                this.emailTemplate = {
+                    email_category_id:'',
+                    template:''
+                }
+            }).catch(error => {
+                this.sweetAlert().error('Error creating template');
+                console.log(error.response.data)
+            }).finally(() => {
+                this.hideLoader();
+            })
+        }
+
+    },
     computed: {
+        myUserStructure() {
+            return this.userStructre
+        },
         currentUser() {
             return this.$store.state.currentUser;
         },
@@ -62,6 +173,11 @@ export default {
     color: #fff;
     border-radius: 16px;
     margin-bottom: 20px;
+}
+.line {
+    height: 5px;
+    background-color: #073883;
+    margin-bottom: 15px;
 }
 .board_upper > div > h1 {
     text-align: left;

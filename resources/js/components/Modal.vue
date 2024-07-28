@@ -4,7 +4,7 @@
         aria-labelledby="staticBackdropLabel" 
         aria-hidden="true">
 
-      <div class="modal-dialog">
+      <div :class="`modal-dialog ${large ? 'modal-lg' :''}`">
         <div class="modal-content">
           <div :class="'modal-header modal-header-'+(color ? color : 'default')">
             <h5 class="modal-title" id="staticBackdropLabel">
@@ -31,7 +31,7 @@
 <script lang="ts">
 import Button from "./Button.vue";
 export default {
-    props: ["id", "title", "open", "color",'xIcon','notStatic'],
+    props: ["id", "title", "open", "color",'xIcon','notStatic', "large"],
     watch: {
         open: function (newVal, oldVal) {
             console.log("changed", newVal);

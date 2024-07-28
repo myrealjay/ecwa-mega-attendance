@@ -41,14 +41,6 @@ class FollowUp
         $smsSender = new SmsSender();
         
         foreach($absentPeople as $absentPerson) {
-            if ($template) {
-                try {
-                    Mail::to($absentPerson->email)->send(new FollowUpMail($absentPerson, $template, 'Absent From Service'));
-                } catch(\Exception $e) {
-                    Log::error($e);
-                }
-            }
-            
             if ($smsTemplate) {
                 try {
                     $smsSender->send([$absentPerson->phone_number], $smsTemplate, $absentPerson);
@@ -56,10 +48,17 @@ class FollowUp
                     Log::error($e);
                 }
             }
-           
+
+            if ($template) {
+                try {
+                    Mail::to($absentPerson->email)->send(new FollowUpMail($absentPerson, $template, 'Absent From Service'));
+                } catch(\Exception $e) {
+                    Log::error($e);
+                }
+            }
         }
 
-       $this->notifyRecipients($absentPeople);
+      $this->notifyRecipients($absentPeople);
     }
 
     protected function notifyRecipients($absentPeople)
