@@ -29,32 +29,32 @@ const router = createRouter({
                 }
             },
         },
-        {
-            path: "/register",
-            name: "register",
-            component: Register,
-            beforeEnter: async (to, from, next) => {
-                const isLogedIn = store.state.currentUser;
-                if (!isLogedIn) {
-                    next("/");
-                } else {
-                    next();
-                }
-            },
-        },
-        {
-            path: "/add-message",
-            name: "message",
-            component: AddMessage,
-            beforeEnter: async (to, from, next) => {
-                const isLogedIn = store.state.currentUser;
-                if (!isLogedIn) {
-                    next("/");
-                } else {
-                    next();
-                }
-            },
-        },
+        // {
+        //     path: "/register",
+        //     name: "register",
+        //     component: Register,
+        //     beforeEnter: async (to, from, next) => {
+        //         const isLogedIn = store.state.currentUser;
+        //         if (!isLogedIn) {
+        //             next("/");
+        //         } else {
+        //             next();
+        //         }
+        //     },
+        // },
+        // {
+        //     path: "/add-message",
+        //     name: "message",
+        //     component: AddMessage,
+        //     beforeEnter: async (to, from, next) => {
+        //         const isLogedIn = store.state.currentUser;
+        //         if (!isLogedIn) {
+        //             next("/");
+        //         } else {
+        //             next();
+        //         }
+        //     },
+        // },
         {
             path: "/forgot-password",
             name: "forgot-password",
