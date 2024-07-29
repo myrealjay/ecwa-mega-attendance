@@ -17,15 +17,6 @@
                 <img src="../assets/images/church.jpg" alt="logo" />
             </div>
         </div>
-        <div class="button-container">
-            <Button
-                aria-label="Attendance for last 4 Sundays"
-                text="ADD SMS TEMPLATE"
-                color="secondary"
-                icon="mdi mdi-plus-box"
-                @buttonClicked="showSmsTemplateModal()"
-            ></Button>
-        </div>
 
         <div class="line"></div>
 
@@ -56,39 +47,6 @@
             </div>
            
         </div>
-       
-        <Modal
-            id="addSmsTemplate"
-            title="Add SMS Template"
-            :open="smsTemplateOpen"
-            @closed="smsTemplateOpen = false"
-            :large="false"
-        >
-            <div>
-                <div class="line"></div>
-                <SingleSelect
-                    :options="categories"
-                    custom_value="id"
-                    v-model="smsTemplate.email_category_id"
-                    text="name"
-                    label="Category"
-                ></SingleSelect>
-                <TextAreaField
-                    label="Message"
-                    v-model="smsTemplate.template"
-                    rows="10"
-                    placeholder="Enter SMS Template..."
-                />
-            </div>
-            <template #buttons>
-                <Button
-                    icon="mdi-book"
-                    text="Submit Template"
-                    color="primary"
-                    @buttonClicked="addSmsTemplate()"
-                />
-            </template>
-        </Modal>
     </div>
 </template>
 
@@ -149,12 +107,7 @@ export default {
     data() {
         return {
             errors: {},
-            smsTemplateOpen: false,
             categories: [],
-            smsTemplate: {
-                email_category_id: "",
-                template: "",
-            },
             userStructure: {},
             chartData: null,
             chartOptions: {
@@ -163,34 +116,6 @@ export default {
         };
     },
     methods: {
-        showSmsTemplateModal() {
-            this.smsTemplateOpen = true;
-        },
-        addSmsTemplate() {
-            this.showLoader();
-            this.makeRequest(
-                "POST",
-                this.endpoints.createSmsTemplate,
-                this.smsTemplate
-            )
-                .then((response) => {
-                    this.sweetAlert().success(
-                        "SMS template successfully saved"
-                    );
-                    this.smsTemplateOpen = false;
-                    this.smsTemplate = {
-                        email_category_id: "",
-                        template: "",
-                    };
-                })
-                .catch((error) => {
-                    this.sweetAlert().error("Error creating template");
-                    console.log(error.response.data);
-                })
-                .finally(() => {
-                    this.hideLoader();
-                });
-        }
     },
     components: {
         Button,

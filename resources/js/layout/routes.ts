@@ -13,6 +13,12 @@ export function sideBarRoutes() {
             roles: ["Super Admin", "Admin"],
         },
         {
+            title: "SMS Templates",
+            icon: "mdi mdi-email",
+            name: "sms-templates",
+            roles: ["Super Admin", "Admin"],
+        },
+        {
             title: "Members",
             icon: "mdi mdi-account-multiple",
             name: "members",

@@ -2,15 +2,16 @@
     <div>
         <div class="button-container">
             <Button
-                text="ADD EMAIL TEMPLATE"
+                aria-label="Attendance for last 4 Sundays"
+                text="ADD SMS TEMPLATE"
                 color="primary"
                 icon="mdi mdi-plus-box"
-                @buttonClicked="showEmailTemplateModal()"
+                @buttonClicked="showSmsTemplateModal()"
             ></Button>
         </div>
 
         <div class="line"></div>
-        <h2 class="head">Email Templates</h2>
+        <h2 class="head">SMS Templates</h2>
         <div class="messages">
             <Message v-for="template in templates" :key="template.id"
                 :message="template.template"
@@ -27,11 +28,11 @@
         />
 
         <Modal
-            id="addEmailTemplate"
-            title="Add Email Template"
-            :open="emailTemplateOpen"
-            @closed="emailTemplateOpen = false"
-            :large="true"
+            id="addSmsTemplate"
+            title="Add SMS Template"
+            :open="smsTemplateOpen"
+            @closed="smsTemplateOpen = false"
+            :large="false"
         >
             <div>
                 <div>
@@ -43,25 +44,15 @@
                 <SingleSelect
                     :options="categories"
                     custom_value="id"
-                    v-model="emailTemplate.email_category_id"
+                    v-model="smsTemplate.email_category_id"
                     text="name"
                     label="Category"
                 ></SingleSelect>
-                <editor
-                    :init="{
-                        height: 200,
-                        menubar: false,
-                        plugins: [
-                            'advlist autolink lists link image charmap print preview anchor',
-                            'searchreplace visualblocks code fullscreen',
-                            'media table paste code help wordcount',
-                        ],
-                        toolbar:
-                            'undo redo | formatselect | bold italic backcolor | \
-                            alignleft aligncenter alignright alignjustify | \
-                            bullist numlist outdent indent | removeformat | help',
-                    }"
-                    v-model="emailTemplate.template"
+                <TextAreaField
+                    label="Message"
+                    v-model="smsTemplate.template"
+                    rows="10"
+                    placeholder="Enter SMS Template..."
                 />
             </div>
             <template #buttons>
@@ -69,7 +60,7 @@
                     icon="mdi-book"
                     text="Submit Template"
                     color="primary"
-                    @buttonClicked="addEmailTemplate()"
+                    @buttonClicked="addSmsTemplate()"
                 />
             </template>
         </Modal>
@@ -78,12 +69,12 @@
 <script>
 import Button from "../components/Button.vue";
 import Message from "../components/Message.vue";
-import Editor from "@tinymce/tinymce-vue";
 import SingleSelect from "../components/SingleSelect.vue";
 import Modal from "../components/Modal.vue";
 import Pagination from "../components/Pagination.vue";
+import TextAreaField from "../components/TextAreaField.vue";
 export default {
-    components: { Message, Button, editor:Editor, SingleSelect, Modal , Pagination},
+    components: { Message, Button, SingleSelect, Modal , Pagination, TextAreaField},
     mounted() {
         this.makeRequest("GET", this.endpoints.userStructre)
             .then((response) => {
@@ -107,26 +98,27 @@ export default {
         return {
             emailTemplateOpen: false,
             userStructure: {},
-            emailTemplate: {
+            smsTemplate: {
                 email_category_id: "",
                 template: "",
             },
             categories: [],
             templates:[],
-            paginationData:{}
+            paginationData:{},
+            smsTemplateOpen: false,
         }
     },
     methods: {
         fetchTemplates() {
-            this.makeRequest('GET', this.endpoints.fetchEmailTemplates).then(response => {
+            this.makeRequest('GET', this.endpoints.fetchSmsTemplates).then(response => {
                 this.templates = response.data.data.data;
                 this.paginationData = response.data.data;
             }).catch(error => {
                 console.log(error.response.data)
             })
         },
-        showEmailTemplateModal() {
-            this.emailTemplateOpen = true;
+        showSmsTemplateModal() {
+            this.smsTemplateOpen = true;
         },
         getAttributes() {
             let attributes = "";
@@ -136,19 +128,19 @@ export default {
 
             return attributes;
         },
-        addEmailTemplate() {
+        addSmsTemplate() {
             this.showLoader();
             this.makeRequest(
                 "POST",
-                this.endpoints.createEmailTemplate,
-                this.emailTemplate
+                this.endpoints.createSmsTemplate,
+                this.smsTemplate
             )
                 .then((response) => {
                     this.sweetAlert().success(
-                        "Email template successfully saved"
+                        "SMS template successfully saved"
                     );
-                    this.emailTemplateOpen = false;
-                    this.emailTemplate = {
+                    this.smsTemplateOpen = false;
+                    this.smsTemplate = {
                         email_category_id: "",
                         template: "",
                     };
@@ -161,7 +153,7 @@ export default {
                 .finally(() => {
                     this.hideLoader();
                 });
-        },
+        }
     }
 };
 </script>
