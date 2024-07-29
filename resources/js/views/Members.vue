@@ -9,6 +9,12 @@
             ></Button>
         </div>
         <h2>LIST OF ALL CHURCH MEMBER</h2>
+        <input
+            type="text"
+            v-model="searchQuery"
+            placeholder="Search by Name"
+            class="search"
+        />
         <table>
             <thead>
                 <tr>
@@ -20,7 +26,12 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(contact, index) in paginatedContacts" :key="index">
+                <tr
+                    v-for="(contact, index) in paginatedContacts"
+                    :key="index"
+                    @click="fetchContactDetails(contact.id)"
+                    class="detail-click"
+                >
                     <td>{{ contact.name }}</td>
                     <td>{{ contact.phone_number }}</td>
                     <td>{{ contact.email }}</td>
@@ -96,7 +107,9 @@
                     <DateTimeField
                         label="Wedding Date"
                         v-model="form.wedding_date"
-                        :error="errors.wedding_date ? errors.wedding_date[0] : ''"
+                        :error="
+                            errors.wedding_date ? errors.wedding_date[0] : ''
+                        "
                     />
                 </form>
             </div>
@@ -131,21 +144,31 @@ export default {
                 address: "",
                 dob: "",
                 phone_number: "",
-                wedding_date:''
+                wedding_date: "",
             },
             errors: {},
             registerModalOpen: false,
+            searchQuery: "",
         };
     },
     computed: {
         totalPages() {
-            return Math.ceil(this.contactData.length / this.pageSize);
+            return Math.ceil(this.filteredContacts.length / this.pageSize);
         },
         paginatedContacts() {
             const startIndex = (this.currentPage - 1) * this.pageSize;
-            return this.contactData.slice(
+            return this.filteredContacts.slice(
                 startIndex,
                 startIndex + this.pageSize
+            );
+        },
+        filteredContacts() {
+            if (!this.searchQuery) {
+                return this.contactData;
+            }
+            const query = this.searchQuery.toLowerCase();
+            return this.contactData.filter((contact) =>
+                contact.name.toLowerCase().includes(query)
             );
         },
         ...mapState(["contactData"]),
@@ -171,9 +194,7 @@ export default {
             this.showLoader();
             this.makeRequest("POST", this.endpoints.createUser, {}, this.form)
                 .then((response) => {
-                    this.sweetAlert().success(
-                        "Member Added successfully"
-                    );
+                    this.sweetAlert().success("Member Added successfully");
                     this.$store.dispatch("fetchContactData");
                     this.registerModalOpen = false;
                     this.form = {
@@ -183,7 +204,7 @@ export default {
                         address: "",
                         dob: "",
                         phone_number: "",
-                        wedding_date:''
+                        wedding_date: "",
                     };
                 })
                 .catch((error) => {
@@ -194,7 +215,11 @@ export default {
                     this.hideLoader();
                 });
         },
+        fetchContactDetails(contactId) {
+            this.$router.push({ path: `/members/${contactId}` });
+        },
     },
+
     created() {
         this.$store.dispatch("fetchContactData");
     },
@@ -240,5 +265,13 @@ th {
     margin: 10px;
     cursor: pointer;
     border-radius: 8px;
+}
+.detail-click {
+    cursor: pointer;
+}
+.search {
+    margin: 10px;
+    padding: 10px;
+    min-width: 40%;
 }
 </style>

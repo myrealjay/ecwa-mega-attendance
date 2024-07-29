@@ -26,15 +26,17 @@ const childRoutes = [
         name: "attendance",
         component: () => import("../views/Attendance.vue"),
     },
-    {
-        path: "messages",
-        name: "messages",
-        component: () => import("../views/Messages.vue"),
-    },
+
     {
         path: "attendants",
         name: "attendants",
         component: () => import("../views/Attendants.vue"),
+    },
+    {
+        path: "/members/:id",
+        name: "member",
+        component: () => import("../views/MemberDetails.vue"),
+        props: true,
     },
 ];
 
