@@ -19,11 +19,42 @@
         </div>
         <div class="button-container">
             <Button
+                aria-label="Attendance for last 4 Sundays"
                 text="ADD SMS TEMPLATE"
                 color="secondary"
                 icon="mdi mdi-plus-box"
                 @buttonClicked="showSmsTemplateModal()"
             ></Button>
+        </div>
+
+        <div class="line"></div>
+
+        <div> <h4>Attendance for the last 4 weeks</h4></div>
+        <div class="row charts">
+            <div class="col-md-4">
+                <Bar v-if="chartData"
+                    id="my-chart-id"
+                    :options="chartOptions"
+                    :data="chartData"
+                />
+            </div>
+
+            <div class="col-md-4">
+                <Line v-if="chartData"
+                    id="my-chart-id"
+                    :options="chartOptions"
+                    :data="chartData"
+                />
+            </div>
+
+            <div class="col-md-4">
+                <Pie v-if="chartData"
+                    id="my-chart-id"
+                    :options="chartOptions"
+                    :data="chartData"
+                />
+            </div>
+           
         </div>
        
         <Modal
@@ -69,6 +100,11 @@ import TextAreaField from "../components/TextAreaField.vue";
 import EmailField from "../components/EmailField.vue";
 import DateTimeField from "../components/DateTimeField.vue";
 import SingleSelect from "../components/SingleSelect.vue";
+import { Bar, Line, Pie, Bubble , Doughnut} from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale ,ArcElement,
+  PointElement,
+  LineElement,} from 'chart.js'
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale, ArcElement, PointElement, LineElement)
 
 export default {
     mounted() {
@@ -78,6 +114,36 @@ export default {
             })
             .catch((error) => {
                 console.log(error.response);
+            });
+
+        this.makeRequest("GET", this.endpoints.last4Sundays)
+        .then((response) => {
+            let labels = [];
+            let data = [];
+            let backgroundColors = ['#3252a8', '#33898f', '#DD1B16', '#41B883']
+            let usedColors = [];
+
+            let counter = 0;
+            response.data.data.forEach(item => {
+                labels.push(item.date);
+                data.push(item.total);
+                usedColors.push(backgroundColors[counter]);
+                counter++;
+            });
+
+            this.chartData = {
+                labels,
+                datasets:[
+                    {
+                        label: '',
+                        backgroundColor: usedColors,
+                        data
+                    }
+                ]
+            }
+        })
+        .catch((error) => {
+            console.log(error.response);
             });
     },
     data() {
@@ -90,19 +156,15 @@ export default {
                 template: "",
             },
             userStructure: {},
+            chartData: null,
+            chartOptions: {
+                responsive: true
+            }
         };
     },
     methods: {
         showSmsTemplateModal() {
             this.smsTemplateOpen = true;
-        },
-        getAttributes() {
-            let attributes = "";
-            for (let value in this.userStructure) {
-                attributes += `$${value}$ , `;
-            }
-
-            return attributes;
         },
         addSmsTemplate() {
             this.showLoader();
@@ -138,6 +200,11 @@ export default {
         DateTimeField,
         SingleSelect,
         TextAreaField,
+        Bar,
+        Line,
+        Pie,
+        Bubble,
+        Doughnut
     },
     computed: {
         currentUser() {

@@ -32,8 +32,10 @@
         "@fortawesome/free-solid-svg-icons": "^6.4.0",
         "@fortawesome/vue-fontawesome": "^3.0.3",
         "@tinymce/tinymce-vue": "^4.0.7",
+        "chart.js": "^4.4.3",
         "luxon": "^3.3.0",
         "moment-countdown": "^0.0.3",
-        "tinymce": "^5.10.9"
+        "tinymce": "^5.10.9",
+        "vue-chartjs": "^5.3.1"
     }
 }

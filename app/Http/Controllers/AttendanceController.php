@@ -7,7 +7,9 @@ use App\Http\Resources\AttendanceResource;
 use App\Models\Attendance;
 use App\Models\User;
 use App\Traits\HasResponse;
+use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
@@ -59,5 +61,26 @@ class AttendanceController extends Controller
             'present' => $present,
             'absent' => $absent
         ]);
+    }
+
+    public function last4Sundays()
+    {
+        $sundays = [];
+        $date = new DateTime();
+
+        // Find the most recent Sunday
+        if ($date->format('N') != 7) {
+            $date->modify('last Sunday');
+        }
+
+        // Add the last 4 Sundays to the array
+        for ($i = 0; $i < 4; $i++) {
+            $sundays[] = $date->format('Y-m-d');
+            $date->modify('-1 week');
+        }
+
+        $attendance = Attendance::selectRaw('DATE(date) as date, count(*) as total')->whereIn(DB::raw("DATE(date)"),$sundays)->groupBy('date')->get();
+
+        return $this->successResponse('Attendance statistics fetched', $attendance);
     }
 }

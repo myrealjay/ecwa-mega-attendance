@@ -43,6 +43,7 @@ Route::group(['prefix' => 'attendance', 'middleware' => ['auth:sanctum']], funct
     Route::get('', [AttendanceController::class, 'index'])->name('getAttendance');
     Route::post('', [AttendanceController::class, 'store'])->name('markAttendance');
     Route::get('by-date', [AttendanceController::class, 'attendanceByDate'])->name('getByDate');
+    Route::get('last4sundays', [AttendanceController::class, 'last4Sundays'])->name('getLast4Sundays');
 });
 
 Route::group(['prefix' => 'email-categories', 'middleware' => ['auth:sanctum']], function() {
