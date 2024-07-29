@@ -1,14 +1,14 @@
 <template>
     <div class="message-card">
         <div class="card-header">
-            <h2 class="card-title">{{ title }}</h2>
+            <h2 class="card-title">{{ category }}</h2>
         </div>
         <div class="card-body">
-            <p class="card-message">{{ message }}</p>
+            <p class="card-message" v-html="message"></p>
         </div>
-        <div class="card-footer">
+        <!-- <div class="card-footer">
             <span class="card-category"> {{ category }} </span>
-        </div>
+        </div> -->
     </div>
 </template>
 

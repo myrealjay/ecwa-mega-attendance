@@ -24,12 +24,6 @@
                 icon="mdi mdi-plus-box"
                 @buttonClicked="showSmsTemplateModal()"
             ></Button>
-            <Button
-                text="ADD EMAIL TEMPLATE"
-                color="info"
-                icon="mdi mdi-plus-box"
-                @buttonClicked="showEmailTemplateModal()"
-            ></Button>
         </div>
        
         <Modal
@@ -64,54 +58,6 @@
                 />
             </template>
         </Modal>
-
-        <Modal
-            id="addEmailTemplate"
-            title="Add Email Template"
-            :open="emailTemplateOpen"
-            @closed="emailTemplateOpen = false"
-            :large="true"
-        >
-            <div>
-                <div>
-                    <b>You can use any of these attributes:</b><br />{{
-                        getAttributes()
-                    }}
-                </div>
-                <div class="line"></div>
-                <SingleSelect
-                    :options="categories"
-                    custom_value="id"
-                    v-model="emailTemplate.email_category_id"
-                    text="name"
-                    label="Category"
-                ></SingleSelect>
-                <editor
-                    :init="{
-                        height: 300,
-                        menubar: false,
-                        plugins: [
-                            'advlist autolink lists link image charmap print preview anchor',
-                            'searchreplace visualblocks code fullscreen',
-                            'media table paste code help wordcount',
-                        ],
-                        toolbar:
-                            'undo redo | formatselect | bold italic backcolor | \
-                            alignleft aligncenter alignright alignjustify | \
-                            bullist numlist outdent indent | removeformat | help',
-                    }"
-                    v-model="emailTemplate.template"
-                />
-            </div>
-            <template #buttons>
-                <Button
-                    icon="mdi-book"
-                    text="Submit Template"
-                    color="primary"
-                    @buttonClicked="addEmailTemplate()"
-                />
-            </template>
-        </Modal>
     </div>
 </template>
 
@@ -123,18 +69,9 @@ import TextAreaField from "../components/TextAreaField.vue";
 import EmailField from "../components/EmailField.vue";
 import DateTimeField from "../components/DateTimeField.vue";
 import SingleSelect from "../components/SingleSelect.vue";
-import Editor from "@tinymce/tinymce-vue";
 
 export default {
     mounted() {
-        this.makeRequest("GET", this.endpoints.userStructure)
-            .then((response) => {
-                this.userStructure = response.data.data;
-            })
-            .catch((error) => {
-                console.log(error.response.data);
-            });
-
         this.makeRequest("GET", this.endpoints.getCategories)
             .then((response) => {
                 this.categories = response.data.data;
@@ -147,12 +84,7 @@ export default {
         return {
             errors: {},
             smsTemplateOpen: false,
-            emailTemplateOpen: false,
             categories: [],
-            emailTemplate: {
-                email_category_id: "",
-                template: "",
-            },
             smsTemplate: {
                 email_category_id: "",
                 template: "",
@@ -163,9 +95,6 @@ export default {
     methods: {
         showSmsTemplateModal() {
             this.smsTemplateOpen = true;
-        },
-        showEmailTemplateModal() {
-            this.emailTemplateOpen = true;
         },
         getAttributes() {
             let attributes = "";
@@ -199,32 +128,7 @@ export default {
                 .finally(() => {
                     this.hideLoader();
                 });
-        },
-        addEmailTemplate() {
-            this.showLoader();
-            this.makeRequest(
-                "POST",
-                this.endpoints.createEmailTemplate,
-                this.emailTemplate
-            )
-                .then((response) => {
-                    this.sweetAlert().success(
-                        "Email template successfully saved"
-                    );
-                    this.emailTemplateOpen = false;
-                    this.emailTemplate = {
-                        email_category_id: "",
-                        template: "",
-                    };
-                })
-                .catch((error) => {
-                    this.sweetAlert().error("Error creating template");
-                    console.log(error.response.data);
-                })
-                .finally(() => {
-                    this.hideLoader();
-                });
-        },
+        }
     },
     components: {
         Button,
@@ -233,7 +137,6 @@ export default {
         EmailField,
         DateTimeField,
         SingleSelect,
-        editor: Editor,
         TextAreaField,
     },
     computed: {

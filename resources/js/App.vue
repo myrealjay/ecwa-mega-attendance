@@ -29,4 +29,11 @@
       color: #000;
     }
 
+    .line {
+      height: 5px;
+      background-color: #073883;
+      margin-bottom: 15px;
+      margin-top: 8px;
+  }
+
    </style>

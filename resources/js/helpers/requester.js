@@ -10,6 +10,7 @@ export function makeRequest(method = 'GET', url = "", params = {}, body={}, down
     if (store.state.currentUser) {
         headers['Authorization'] = `Bearer ${store.state.currentUser.token}`;
     }
+    headers['Accept'] = 'application/json'
 
     axios.interceptors.response.use((response) => {
         return response;
