@@ -19,12 +19,6 @@
         </div>
         <div class="button-container">
             <Button
-                text="ADD MEMBER"
-                color="success"
-                icon="mdi mdi-plus-circle"
-                @buttonClicked="showRegisterModal()"
-            ></Button>
-            <Button
                 text="ADD SMS TEMPLATE"
                 color="secondary"
                 icon="mdi mdi-plus-box"
@@ -37,59 +31,7 @@
                 @buttonClicked="showEmailTemplateModal()"
             ></Button>
         </div>
-        <Modal
-            id="registerModal"
-            title="Register Church Member"
-            :open="registerModalOpen"
-            @closed="registerModalOpen = false"
-            :large="false"
-        >
-            <div>
-                <div class="line"></div>
-                <form class="pt-3">
-                    <TextField
-                        label="First Name"
-                        v-model="form.first_name"
-                        :error="errors.first_name ? errors.first_name[0] : ''"
-                    />
-                    <TextField
-                        label="Last Name"
-                        v-model="form.last_name"
-                        :error="errors.last_name ? errors.last_name[0] : ''"
-                    />
-                    <TextField
-                        label="Phone Number"
-                        v-model="form.phone_number"
-                        :error="
-                            errors.phone_number ? errors.phone_number[0] : ''
-                        "
-                    />
-                    <TextField
-                        label="Home Address"
-                        v-model="form.address"
-                        :error="errors.address ? errors.address[0] : ''"
-                    />
-                    <EmailField
-                        label="Email"
-                        v-model="form.email"
-                        :error="errors.email ? errors.email[0] : ''"
-                    />
-                    <DateTimeField
-                        label="DOB"
-                        v-model="form.dob"
-                        :error="errors.dob ? errors.dob[0] : ''"
-                    />
-                    <div class="mt-3">
-                        <button
-                            class="btn btn-block btn-primary btn-lg font-weight-medium auth-form-btn"
-                            @click.prevent="register()"
-                        >
-                            Register
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </Modal>
+       
         <Modal
             id="addSmsTemplate"
             title="Add SMS Template"
@@ -203,16 +145,7 @@ export default {
     },
     data() {
         return {
-            form: {
-                first_name: "",
-                last_name: "",
-                email: "",
-                address: "",
-                dob: "",
-                phone_number: "",
-            },
             errors: {},
-            registerModalOpen: false,
             smsTemplateOpen: false,
             emailTemplateOpen: false,
             categories: [],
@@ -228,35 +161,6 @@ export default {
         };
     },
     methods: {
-        register() {
-            this.errors = {};
-            this.showLoader();
-            this.makeRequest("POST", this.endpoints.createUser, {}, this.form)
-                .then((response) => {
-                    this.sweetAlert().success(
-                        "Registration template successfully saved"
-                    );
-                    this.registerModalOpen = false;
-                    this.form = {
-                        first_name: "",
-                        last_name: "",
-                        email: "",
-                        address: "",
-                        dob: "",
-                        phone_number: "",
-                    };
-                })
-                .catch((error) => {
-                    this.sweetAlert().error("Error Registration");
-                    console.log(error.response.data);
-                })
-                .finally(() => {
-                    this.hideLoader();
-                });
-        },
-        showRegisterModal() {
-            this.registerModalOpen = true;
-        },
         showSmsTemplateModal() {
             this.smsTemplateOpen = true;
         },
@@ -336,10 +240,7 @@ export default {
         currentUser() {
             return this.$store.state.currentUser;
         },
-    },
-    created() {
-        this.$store.dispatch("fetchContactData");
-    },
+    }
 };
 </script>
 

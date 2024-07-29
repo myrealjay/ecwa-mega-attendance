@@ -34,12 +34,9 @@ const store = createStore({
             sessionStorage.setItem("contactData", contacts);
         },
         setAttendantData(state, payload) {
-            console.log("Received attendant data:", payload);
-
             state.attendantData = payload;
             const attendants = JSON.stringify(state.attendantData);
             sessionStorage.setItem("attendantData", attendants);
-            console.log("Updated state.attendantData:", state.attendantData);
         },
     },
     getters: {
