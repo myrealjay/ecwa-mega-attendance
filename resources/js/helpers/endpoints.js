@@ -5,7 +5,7 @@ export function endpoints() {
         refreshToken: "/auth/refresh",
         logout: "/auth/logout",
         getCategories: "/email-categories",
-        fetchAttendanceByDate: "attendance/by-date",
+        fetchAttendanceByDate: "/attendance/by-date",
         takeAttendance: "/attendance",
         fetchUsers: "/users",
         fetchAllUsers: "/users/all",

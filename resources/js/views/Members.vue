@@ -9,12 +9,21 @@
             ></Button>
         </div>
         <h2>LIST OF ALL CHURCH MEMBER</h2>
-        <input
-            type="text"
-            v-model="searchQuery"
-            placeholder="Search by Name"
-            class="search"
-        />
+        <div class="search-items">
+            <input
+                type="text"
+                v-model="tableData.search"
+                placeholder="Search members"
+                class="search"
+                @input="fetchData()"
+            />
+
+            <select class="form-control length-select" v-model="tableData.length" @change="fetchData()">
+                <option v-for="item in lengthData" :value="item" :key="item">{{ item }}</option>
+                <option v-if="tableData.total" :value="tableData.total">All</option>
+            </select>
+        </div>
+       
         <table>
             <thead>
                 <tr>
@@ -27,8 +36,8 @@
             </thead>
             <tbody>
                 <tr
-                    v-for="(contact, index) in paginatedContacts"
-                    :key="index"
+                    v-for=" contact in userData"
+                    :key="contact.id"
                     @click="fetchContactDetails(contact.id)"
                     class="detail-click"
                 >
@@ -36,30 +45,18 @@
                     <td>{{ contact.phone_number }}</td>
                     <td>{{ contact.email }}</td>
                     <td>{{ contact.address }}</td>
-                    <td>{{ contact.dob }}</td>
+                    <td>{{ formatDate(contact.dob, true) }}</td>
                 </tr>
             </tbody>
         </table>
 
-        <div class="pagination">
-            <button
-                @click="prevPage"
-                :disabled="currentPage === 1"
-                class="previous"
-            >
-                Previous
-            </button>
-            <span class="pages"
-                >Page {{ currentPage }} of {{ totalPages }}</span
-            >
-            <button
-                @click="nextPage"
-                :disabled="currentPage === totalPages"
-                class="next"
-            >
-                Next
-            </button>
-        </div>
+        <Pagination
+            :from="tableData.from"
+            :to="tableData.to"
+            :links="tableData.links"
+            :total="tableData.total"
+            @page-clicked="setPage"
+        ></Pagination>
 
         <Modal
             id="registerModal"
@@ -111,6 +108,13 @@
                             errors.wedding_date ? errors.wedding_date[0] : ''
                         "
                     />
+
+                    <FileField  
+                        v-model="form.picture"
+                        :error="
+                            errors.picture ? errors.picture[0] : ''
+                        " 
+                    />
                 </form>
             </div>
             <template #buttons>
@@ -131,7 +135,9 @@ import Modal from "../components/Modal.vue";
 import TextField from "../components/TextField.vue";
 import EmailField from "../components/EmailField.vue";
 import DateTimeField from "../components/DateTimeField.vue";
+import Pagination from "../components/Pagination.vue";
 import { mapState } from "vuex";
+import FileField from "../components/FileField.vue"
 export default {
     data() {
         return {
@@ -145,57 +151,67 @@ export default {
                 dob: "",
                 phone_number: "",
                 wedding_date: "",
+                picture:""
             },
             errors: {},
             registerModalOpen: false,
             searchQuery: "",
+            userData:[],
+            lengthData:[
+                5,10,20,30,40,50,100
+            ],
+            tableData:{
+                search:'',
+                currentPage:1,
+                length:5,
+                links:{},
+                from:'',
+                to:'',
+                total:'',
+            }
         };
     },
+    mounted() {
+        this.fetchData();
+    },
     computed: {
-        totalPages() {
-            return Math.ceil(this.filteredContacts.length / this.pageSize);
-        },
-        paginatedContacts() {
-            const startIndex = (this.currentPage - 1) * this.pageSize;
-            return this.filteredContacts.slice(
-                startIndex,
-                startIndex + this.pageSize
-            );
-        },
-        filteredContacts() {
-            if (!this.searchQuery) {
-                return this.contactData;
-            }
-            const query = this.searchQuery.toLowerCase();
-            return this.contactData.filter((contact) =>
-                contact.name.toLowerCase().includes(query)
-            );
-        },
-        ...mapState(["contactData"]),
+        
     },
 
     methods: {
+        setPage(page) {
+            this.tableData.currentPage = page;
+            this.fetchData();
+        },
+        fetchData(url = this.endpoints.fetchUsers) {
+            this.makeRequest('GET', `${url}?page=${this.tableData.currentPage}`, this.tableData).then(response=> {
+                let data = response.data.data;
+                this.tableData.currentPage = data.current_page;
+                this.tableData.from = data.from;
+                this.tableData.to = data.to;
+                this.tableData.prevPage = data.prev_page_url;
+                this.tableData.nextPage = data.next_page_url;
+                this.tableData.links = data.links;
+                this.tableData.total = data.total
+                this.userData = data.data;
+            }).catch(error => {
+                console.log(error.response.data)
+            })
+        },
         showRegisterModal() {
             this.registerModalOpen = true;
-        },
-        nextPage() {
-            if (this.currentPage < this.totalPages) {
-                this.currentPage++;
-            }
-        },
-        prevPage() {
-            if (this.currentPage > 1) {
-                this.currentPage--;
-            }
         },
 
         register() {
             this.errors = {};
+            let formData = new FormData();
+            for(let item in this.form) {
+                formData.append(item, this.form[item]);
+            }
             this.showLoader();
-            this.makeRequest("POST", this.endpoints.createUser, {}, this.form)
+            this.makeRequest("POST", this.endpoints.createUser, {}, formData)
                 .then((response) => {
                     this.sweetAlert().success("Member Added successfully");
-                    this.$store.dispatch("fetchContactData");
                     this.registerModalOpen = false;
                     this.form = {
                         first_name: "",
@@ -206,6 +222,8 @@ export default {
                         phone_number: "",
                         wedding_date: "",
                     };
+
+                    this.fetchData();
                 })
                 .catch((error) => {
                     this.sweetAlert().error("Error Registration");
@@ -219,16 +237,14 @@ export default {
             this.$router.push({ path: `/members/${contactId}` });
         },
     },
-
-    created() {
-        this.$store.dispatch("fetchContactData");
-    },
     components: {
         Button,
         Modal,
         TextField,
         EmailField,
         DateTimeField,
+        Pagination,
+        FileField
     },
 };
 </script>
@@ -270,8 +286,16 @@ th {
     cursor: pointer;
 }
 .search {
-    margin: 10px;
+    margin-bottom: 10px;
     padding: 10px;
     min-width: 40%;
+}
+
+.search-items{
+    display: flex;
+    justify-content: space-between;
+}
+.length-select {
+    width:100px;
 }
 </style>
