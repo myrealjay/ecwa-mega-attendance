@@ -8,6 +8,7 @@
                 type="date"
                 v-model="selectedDate"
                 class="date-select"
+                @change="fetchDataByDate"
             />
         </div>
         <div v-if="filteredAttendances.length > 0" class="attendance-list">
@@ -41,9 +42,9 @@
                 >
                     Previous
                 </button>
-                <span class="pages"
-                    >Page {{ currentPage }} of {{ totalPages }}</span
-                >
+                <span class="pages">
+                    Page {{ currentPage }} of {{ totalPages }}
+                </span>
                 <button
                     @click="nextPage"
                     :disabled="currentPage === totalPages"
@@ -60,26 +61,16 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
 export default {
-    mounted() {
-        this.makeRequest("GET", this.endpoints.userStructre)
-            .then((response) => {
-                this.userStructure = response.data.data;
-            })
-            .catch((error) => {
-                console.log(error.response.data);
-            });
-    },
     data() {
         return {
             selectedDate: "",
             currentPage: 1,
             pageSize: 10,
+            attendantData: [],
         };
     },
     computed: {
-        ...mapState(["attendantData"]),
         totalPages() {
             return Math.ceil(this.filteredAttendances.length / this.pageSize);
         },
@@ -90,30 +81,26 @@ export default {
                 startIndex + this.pageSize
             );
         },
-        availableDates() {
-            return Object.keys(this.attendantData || {});
-        },
         filteredAttendances() {
-            // Ensure that attendantData and the specific date entry exist
-            if (
-                !this.selectedDate ||
-                !this.attendantData ||
-                !this.attendantData[this.selectedDate]
-            ) {
-                return [];
-            }
-            const { present } = this.attendantData[this.selectedDate];
-            return present
-                ? present.map((p) => ({ ...p, status: "Present" }))
-                : [];
+            return this.attendantData.filter(
+                (attendance) => attendance.date === this.selectedDate
+            );
         },
     },
     methods: {
-        ...mapActions(["fetchAttendantData"]),
         fetchDataByDate() {
-            if (this.selectedDate) {
-                this.fetchAttendantData({ date: this.selectedDate });
-            }
+            this.makeRequest(
+                "GET",
+                `${this.endpoints.fetchAttendanceByDate}?date=${this.selectedDate}`
+            )
+                .then((response) => {
+                    this.attendantData = response.data.data;
+                    console.log(this.attendantData);
+                    console.log(response.data);
+                })
+                .catch((error) => {
+                    console.log(error.response.data);
+                });
         },
         nextPage() {
             if (this.currentPage < this.totalPages) {
@@ -125,16 +112,6 @@ export default {
                 this.currentPage--;
             }
         },
-    },
-    watch: {
-        selectedDate(newDate) {
-            this.fetchDataByDate();
-        },
-    },
-    mounted() {
-        if (this.selectedDate) {
-            this.fetchDataByDate();
-        }
     },
 };
 </script>
