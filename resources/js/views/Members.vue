@@ -27,11 +27,11 @@
         <table>
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Phone Number</th>
-                    <th>Email</th>
-                    <th>Address</th>
-                    <th>Date of Birth</th>
+                    <th @click="sortBy('first_name')">Name</th>
+                    <th @click="sortBy('phone_number')">Phone Number</th>
+                    <th @click="sortBy('email')">Email</th>
+                    <th @click="sortBy('address')">Address</th>
+                    <th @click="sortBy('dob')">Date of Birth</th>
                 </tr>
             </thead>
             <tbody>
@@ -168,6 +168,8 @@ export default {
                 from:'',
                 to:'',
                 total:'',
+                sort:'id',
+                sort_direction:'ASC'
             }
         };
     },
@@ -179,6 +181,16 @@ export default {
     },
 
     methods: {
+        sortBy(field) {
+            this.tableData.sort = field;
+            if (this.tableData.sort_direction == 'ASC') {
+                this.tableData.sort_direction = 'DESC';
+            }
+            else {
+                this.tableData.sort_direction = 'ASC';
+            }
+            this.fetchData();
+        },
         setPage(page) {
             this.tableData.currentPage = page;
             this.fetchData();
