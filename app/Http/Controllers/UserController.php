@@ -48,4 +48,11 @@ class UserController extends Controller
         $users = User::all();
         return $this->successResponse('Users fetched successfully', $users);
     }
+
+    public function count()
+    {
+        $users = User::where('email', '!=', 'superadmin@ecwa.com')->count();
+
+        return $this->successResponse('user Count fetched successfully', $users);
+    }
 }

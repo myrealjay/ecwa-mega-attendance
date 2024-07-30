@@ -83,4 +83,39 @@ class AttendanceController extends Controller
 
         return $this->successResponse('Attendance statistics fetched', $attendance);
     }
+
+    public function totalPresentLastSunday()
+    {
+        $date = new DateTime();
+
+        // Find the most recent Sunday
+        if ($date->format('N') != 7) {
+            $date->modify('last Sunday');
+        }
+
+        $date = $date->format('Y-m-d');
+
+        $attendance = Attendance::selectRaw('DATE(date) as date, count(*) as total')
+        ->where(DB::raw("DATE(date)"),$date)->count();
+
+        return $this->successResponse('Attendance statistics fetched', $attendance);
+    }
+
+    public function totalAbsentLastSunday()
+    {
+        $date = new DateTime();
+
+        // Find the most recent Sunday
+        if ($date->format('N') != 7) {
+            $date->modify('last Sunday');
+        }
+
+        $date = $date->format('Y-m-d');
+
+        $attendance = Attendance::where(DB::raw("DATE(date)"),$date)->pluck('user_id');
+
+        $users = User::whereNotIn('id', $attendance)->count();
+
+        return $this->successResponse('Attendance statistics fetched', $users);
+    }
 }

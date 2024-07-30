@@ -20,6 +20,18 @@
 
         <div class="line"></div>
 
+        <div class="row">
+            <div class="col-md-4"><Counter color="blue" :count="count" name="Members" /></div>
+            <div class="col-md-4">
+                <Counter color="yellow" :count="userPresentCount" name="Users Present Last Sunday" />
+            </div>
+            <div class="col-md-4">
+                <Counter color="red" :count="userAbsentCount" name="Users Absent Last Sunday" />
+            </div>
+        </div>
+
+        <div class="line"></div>
+
         <div> <h4>Attendance for the last 4 weeks</h4></div>
         <div class="row charts">
             <div class="col-md-4">
@@ -58,6 +70,7 @@ import TextAreaField from "../components/TextAreaField.vue";
 import EmailField from "../components/EmailField.vue";
 import DateTimeField from "../components/DateTimeField.vue";
 import SingleSelect from "../components/SingleSelect.vue";
+import Counter from "../components/Counter.vue";
 import { Bar, Line, Pie, Bubble , Doughnut} from 'vue-chartjs'
 import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale ,ArcElement,
   PointElement,
@@ -73,6 +86,24 @@ export default {
             .catch((error) => {
                 console.log(error.response);
             });
+
+        this.makeRequest('GET', this.endpoints.userCount).then(response => {
+            this.count = response.data.data;
+        }).catch(error => {
+            console.log(error.response);
+        })
+
+        this.makeRequest('GET', this.endpoints.totalPresent).then(response => {
+            this.userPresentCount = response.data.data;
+        }).catch(error => {
+            console.log(error.response);
+        })
+
+        this.makeRequest('GET', this.endpoints.totalAbsent).then(response => {
+            this.userAbsentCount = response.data.data;
+        }).catch(error => {
+            console.log(error.response);
+        })
 
         this.makeRequest("GET", this.endpoints.last4Sundays)
         .then((response) => {
@@ -112,7 +143,10 @@ export default {
             chartData: null,
             chartOptions: {
                 responsive: true
-            }
+            },
+            count:0,
+            userPresentCount:0,
+            userAbsentCount:0
         };
     },
     methods: {
@@ -129,7 +163,8 @@ export default {
         Line,
         Pie,
         Bubble,
-        Doughnut
+        Doughnut,
+        Counter
     },
     computed: {
         currentUser() {

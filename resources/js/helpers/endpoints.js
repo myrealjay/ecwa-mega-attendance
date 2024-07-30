@@ -19,5 +19,8 @@ export function endpoints() {
         deleteEmailTemplate: "/email-templates", //delete
         userStructre: "/users/structure",
         last4Sundays: "/attendance/last4sundays",
+        userCount: "/users/count",
+        totalPresent: "/attendance/total-present",
+        totalAbsent: "/attendance/total-absent"
     };
 }

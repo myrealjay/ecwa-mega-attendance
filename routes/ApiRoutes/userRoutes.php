@@ -36,6 +36,7 @@ Route::group(['prefix' => 'users', 'middleware' => ['auth:sanctum'] ], function(
     Route::get('', [UserController::class, 'index'])->name('users');
     Route::get('all', [UserController::class, 'getUsers'])->name('allUsers');
     Route::get('structure',  [UserController::class, 'getUserStructure']);
+    Route::get('count', [UserController::class, 'count'])->name('getCountUsers');
     Route::get('{id}', [UserController::class, 'show'])->name('getSingleUser');
 });
 
@@ -43,6 +44,8 @@ Route::group(['prefix' => 'attendance', 'middleware' => ['auth:sanctum']], funct
     Route::get('', [AttendanceController::class, 'index'])->name('getAttendance');
     Route::post('', [AttendanceController::class, 'store'])->name('markAttendance');
     Route::get('by-date', [AttendanceController::class, 'attendanceByDate'])->name('getByDate');
+    Route::get('total-present', [AttendanceController::class, 'totalPresentLastSunday']);
+    Route::get('total-absent', [AttendanceController::class, 'totalAbsentLastSunday']);
     Route::get('last4sundays', [AttendanceController::class, 'last4Sundays'])->name('getLast4Sundays');
 });
 
