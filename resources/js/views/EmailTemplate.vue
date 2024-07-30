@@ -7,6 +7,11 @@
                 icon="mdi mdi-plus-box"
                 @buttonClicked="showEmailTemplateModal()"
             ></Button>
+
+            <select class="form-control select-legnth" name="" id="" v-model="tableData.length" @change="fetchTemplates()">
+                <option v-for="item in lengthData" :key="item" :value="item">{{ item }}</option>
+                <option v-if="paginationData.total" :value="paginationData.total">All</option>
+            </select>
         </div>
 
         <div class="line"></div>
@@ -34,6 +39,7 @@
             :to="paginationData.to"
             :links="paginationData.links"
             :total="paginationData.total"
+            @page-clicked="setPage"
         />
 
         <Modal
@@ -134,11 +140,24 @@ export default {
             templates: [],
             paginationData: {},
             edit: false,
+            tableData:{
+                length:15,
+                currentPage:1
+            },
+            lengthData:[10,15,20,30,40,50,100]
         };
     },
     methods: {
+        setPage(page) {
+            this.tableData.currentPage = page;
+            this.fetchTemplates();
+        },
         fetchTemplates() {
-            this.makeRequest("GET", this.endpoints.fetchEmailTemplates)
+            this.makeRequest(
+                "GET", 
+                `${this.endpoints.fetchEmailTemplates}?page=${this.tableData.currentPage}`,
+                this.tableData
+            )
                 .then((response) => {
                     this.templates = response.data.data.data;
                     this.paginationData = response.data.data;
@@ -246,5 +265,9 @@ export default {
 .head {
     text-align: center;
     font-weight: bold;
+}
+
+.select-legnth {
+    width: 100px;
 }
 </style>
