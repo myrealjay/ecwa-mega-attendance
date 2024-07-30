@@ -6,9 +6,10 @@
         <div class="card-body">
             <p class="card-message" v-html="message"></p>
         </div>
-        <!-- <div class="card-footer">
-            <span class="card-category"> {{ category }} </span>
-        </div> -->
+        <div class="card-footer">
+            <slot name="actions"></slot>
+            <!-- Slot for action buttons -->
+        </div>
     </div>
 </template>
 
@@ -57,5 +58,17 @@ export default {
 .card-category {
     font-size: 0.9em;
     color: #666;
+}
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.card-footer > button {
+    border-radius: 8px;
+    border: none;
+}
+.card-footer > button:last-child {
+    color: red;
 }
 </style>

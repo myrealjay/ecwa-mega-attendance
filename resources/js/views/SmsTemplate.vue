@@ -13,15 +13,25 @@
         <div class="line"></div>
         <h2 class="head">SMS Templates</h2>
         <div class="messages">
-            <Message v-for="template in templates" :key="template.id"
+            <Message
+                v-for="template in templates"
+                :key="template.id"
                 :message="template.template"
-                :category="'Category:' + template.category ? template.category.name:'' "
-            />
-           
+                :category="
+                    'Category:' + template.category
+                        ? template.category.name
+                        : ''
+                "
+            >
+                <template #actions>
+                    <button @click="editTemplate(template)">Edit</button>
+                    <button @click="deleteTemplate(template.id)">Delete</button>
+                </template>
+            </Message>
         </div>
 
-        <Pagination 
-            :from="paginationData.from" 
+        <Pagination
+            :from="paginationData.from"
             :to="paginationData.to"
             :links="paginationData.links"
             :total="paginationData.total"
@@ -58,9 +68,9 @@
             <template #buttons>
                 <Button
                     icon="mdi-book"
-                    text="Submit Template"
+                    :text="edit ? 'Edit Template' : 'Submit Template'"
                     color="primary"
-                    @buttonClicked="addSmsTemplate()"
+                    @buttonClicked="edit ? editSmsTemplate() : addSmsTemplate()"
                 />
             </template>
         </Modal>
@@ -74,7 +84,14 @@ import Modal from "../components/Modal.vue";
 import Pagination from "../components/Pagination.vue";
 import TextAreaField from "../components/TextAreaField.vue";
 export default {
-    components: { Message, Button, SingleSelect, Modal , Pagination, TextAreaField},
+    components: {
+        Message,
+        Button,
+        SingleSelect,
+        Modal,
+        Pagination,
+        TextAreaField,
+    },
     mounted() {
         this.makeRequest("GET", this.endpoints.userStructre)
             .then((response) => {
@@ -85,12 +102,12 @@ export default {
             });
 
         this.makeRequest("GET", this.endpoints.getCategories)
-        .then((response) => {
-            this.categories = response.data.data;
-        })
-        .catch((error) => {
-            console.log(error.response);
-        });
+            .then((response) => {
+                this.categories = response.data.data;
+            })
+            .catch((error) => {
+                console.log(error.response);
+            });
 
         this.fetchTemplates();
     },
@@ -103,19 +120,22 @@ export default {
                 template: "",
             },
             categories: [],
-            templates:[],
-            paginationData:{},
+            templates: [],
+            paginationData: {},
             smsTemplateOpen: false,
-        }
+            edit: false,
+        };
     },
     methods: {
         fetchTemplates() {
-            this.makeRequest('GET', this.endpoints.fetchSmsTemplates).then(response => {
-                this.templates = response.data.data.data;
-                this.paginationData = response.data.data;
-            }).catch(error => {
-                console.log(error.response.data)
-            })
+            this.makeRequest("GET", this.endpoints.fetchSmsTemplates)
+                .then((response) => {
+                    this.templates = response.data.data.data;
+                    this.paginationData = response.data.data;
+                })
+                .catch((error) => {
+                    console.log(error.response.data);
+                });
         },
         showSmsTemplateModal() {
             this.smsTemplateOpen = true;
@@ -153,8 +173,58 @@ export default {
                 .finally(() => {
                     this.hideLoader();
                 });
-        }
-    }
+        },
+        editTemplate(template) {
+            this.smsTemplate = { ...template };
+            this.smsTemplateOpen = true;
+            this.edit = true;
+        },
+        editSmsTemplate() {
+            this.showLoader();
+            this.makeRequest(
+                "PUT",
+                `${this.endpoints.updateSmsTemplate}/${this.smsTemplate.id}`,
+                this.smsTemplate
+            )
+                .then((response) => {
+                    this.sweetAlert().success(
+                        "Sms template Edit successfully saved"
+                    );
+                    this.smsTemplateOpen = false;
+                    this.smsTemplate = {
+                        email_category_id: "",
+                        template: "",
+                    };
+                    this.edit = false;
+                    this.fetchTemplates();
+                })
+                .catch((error) => {
+                    this.sweetAlert().error("Error editing template");
+                    console.log(error.response.data);
+                })
+                .finally(() => {
+                    this.hideLoader();
+                });
+        },
+        deleteTemplate(templateId) {
+            if (confirm("Are you sure you want to delete this template?")) {
+                this.makeRequest(
+                    "DELETE",
+                    `${this.endpoints.deleteSmsTemplate}/${templateId}`
+                )
+                    .then((response) => {
+                        this.sweetAlert().success(
+                            "Template deleted successfully"
+                        );
+                        this.fetchTemplates();
+                    })
+                    .catch((error) => {
+                        this.sweetAlert().error("Error deleting template");
+                        console.log(error.response.data);
+                    });
+            }
+        },
+    },
 };
 </script>
 <style>

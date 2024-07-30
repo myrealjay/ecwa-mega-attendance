@@ -12,15 +12,25 @@
         <div class="line"></div>
         <h2 class="head">Email Templates</h2>
         <div class="messages">
-            <Message v-for="template in templates" :key="template.id"
+            <Message
+                v-for="template in templates"
+                :key="template.id"
                 :message="template.template"
-                :category="'Category:' + template.category ? template.category.name:'' "
-            />
-           
+                :category="
+                    'Category:' + template.category
+                        ? template.category.name
+                        : ''
+                "
+            >
+                <template #actions>
+                    <button @click="editTemplate(template)">Edit</button>
+                    <button @click="deleteTemplate(template.id)">Delete</button>
+                </template>
+            </Message>
         </div>
 
-        <Pagination 
-            :from="paginationData.from" 
+        <Pagination
+            :from="paginationData.from"
             :to="paginationData.to"
             :links="paginationData.links"
             :total="paginationData.total"
@@ -67,9 +77,11 @@
             <template #buttons>
                 <Button
                     icon="mdi-book"
-                    text="Submit Template"
+                    :text="edit ? 'Edit Template' : 'Submit Template'"
                     color="primary"
-                    @buttonClicked="addEmailTemplate()"
+                    @buttonClicked="
+                        edit ? editEmailTemplate() : addEmailTemplate()
+                    "
                 />
             </template>
         </Modal>
@@ -83,7 +95,14 @@ import SingleSelect from "../components/SingleSelect.vue";
 import Modal from "../components/Modal.vue";
 import Pagination from "../components/Pagination.vue";
 export default {
-    components: { Message, Button, editor:Editor, SingleSelect, Modal , Pagination},
+    components: {
+        Message,
+        Button,
+        editor: Editor,
+        SingleSelect,
+        Modal,
+        Pagination,
+    },
     mounted() {
         this.makeRequest("GET", this.endpoints.userStructre)
             .then((response) => {
@@ -94,12 +113,12 @@ export default {
             });
 
         this.makeRequest("GET", this.endpoints.getCategories)
-        .then((response) => {
-            this.categories = response.data.data;
-        })
-        .catch((error) => {
-            console.log(error.response);
-        });
+            .then((response) => {
+                this.categories = response.data.data;
+            })
+            .catch((error) => {
+                console.log(error.response);
+            });
 
         this.fetchTemplates();
     },
@@ -112,18 +131,21 @@ export default {
                 template: "",
             },
             categories: [],
-            templates:[],
-            paginationData:{}
-        }
+            templates: [],
+            paginationData: {},
+            edit: false,
+        };
     },
     methods: {
         fetchTemplates() {
-            this.makeRequest('GET', this.endpoints.fetchEmailTemplates).then(response => {
-                this.templates = response.data.data.data;
-                this.paginationData = response.data.data;
-            }).catch(error => {
-                console.log(error.response.data)
-            })
+            this.makeRequest("GET", this.endpoints.fetchEmailTemplates)
+                .then((response) => {
+                    this.templates = response.data.data.data;
+                    this.paginationData = response.data.data;
+                })
+                .catch((error) => {
+                    console.log(error.response.data);
+                });
         },
         showEmailTemplateModal() {
             this.emailTemplateOpen = true;
@@ -162,7 +184,57 @@ export default {
                     this.hideLoader();
                 });
         },
-    }
+        editTemplate(template) {
+            this.emailTemplate = { ...template };
+            this.emailTemplateOpen = true;
+            this.edit = true;
+        },
+        editEmailTemplate() {
+            this.showLoader();
+            this.makeRequest(
+                "PUT",
+                `${this.endpoints.updateEmailTemplate}/${this.emailTemplate.id}`,
+                this.emailTemplate
+            )
+                .then((response) => {
+                    this.sweetAlert().success(
+                        "Email template Edit successfully saved"
+                    );
+                    this.emailTemplateOpen = false;
+                    this.emailTemplate = {
+                        email_category_id: "",
+                        template: "",
+                    };
+                    this.edit = false;
+                    this.fetchTemplates();
+                })
+                .catch((error) => {
+                    this.sweetAlert().error("Error editing template");
+                    console.log(error.response.data);
+                })
+                .finally(() => {
+                    this.hideLoader();
+                });
+        },
+        deleteTemplate(templateId) {
+            if (confirm("Are you sure you want to delete this template?")) {
+                this.makeRequest(
+                    "DELETE",
+                    `${this.endpoints.deleteEmailTemplate}/${templateId}`
+                )
+                    .then((response) => {
+                        this.sweetAlert().success(
+                            "Template deleted successfully"
+                        );
+                        this.fetchTemplates(); // Refresh the list
+                    })
+                    .catch((error) => {
+                        this.sweetAlert().error("Error deleting template");
+                        console.log(error.response.data);
+                    });
+            }
+        },
+    },
 };
 </script>
 <style>

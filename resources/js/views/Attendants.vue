@@ -62,6 +62,15 @@
 <script>
 import { mapState, mapActions } from "vuex";
 export default {
+    mounted() {
+        this.makeRequest("GET", this.endpoints.userStructre)
+            .then((response) => {
+                this.userStructure = response.data.data;
+            })
+            .catch((error) => {
+                console.log(error.response.data);
+            });
+    },
     data() {
         return {
             selectedDate: "",
