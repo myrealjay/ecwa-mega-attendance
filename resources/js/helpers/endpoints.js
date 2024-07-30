@@ -5,7 +5,7 @@ export function endpoints() {
         refreshToken: "/auth/refresh",
         logout: "/auth/logout",
         getCategories: "/email-categories",
-        fetchAttendanceByDate: "attendance/by-date",
+        fetchAttendanceByDate: "/attendance/by-date",
         takeAttendance: "/attendance",
         fetchUsers: "/users",
         fetchAllUsers: "/users/all",
@@ -18,6 +18,6 @@ export function endpoints() {
         updateEmailTemplate: "/email-templates", //put
         deleteEmailTemplate: "/email-templates", //delete
         userStructre: "/users/structure",
-        last4Sundays:"/attendance/last4sundays"
+        last4Sundays: "/attendance/last4sundays",
     };
 }
