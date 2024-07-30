@@ -17,7 +17,8 @@ class UserController extends Controller
         $sort = $request->sort ?? 'first_name';
         $sortDirection = $request->sort_direction ?? 'ASC';
 
-        $users = User::query()->when(!empty($search), function($query) use($search) {
+        $users = User::query()->where('email', '!=', 'superadmin@ecwa.com')
+            ->when(!empty($search), function($query) use($search) {
             return $query->where('first_name', 'LIKE', '%'.$search.'%')
             ->orWhere('last_name', 'LIKE', '%'.$search.'%')
             ->orWhere('email', 'LIKE', '%'.$search.'%')
@@ -45,7 +46,7 @@ class UserController extends Controller
 
     public function getUsers()
     {
-        $users = User::all();
+        $users = User::where('email', '!=', 'superadmin@ecwa.com')->get();
         return $this->successResponse('Users fetched successfully', $users);
     }
 

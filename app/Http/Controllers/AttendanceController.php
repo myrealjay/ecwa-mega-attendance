@@ -54,7 +54,7 @@ class AttendanceController extends Controller
         $present = User::whereIn('id', $attendedUserIds)
         ->orderBy('first_name', 'ASC')->get();
         
-        $absent = User::whereNotIn('id', $attendedUserIds)
+        $absent = User::where('id', '!=', 'superadmin@ecwa.com')->whereNotIn('id', $attendedUserIds)
         ->orderBy('first_name', 'ASC')->get();
 
         return $this->successResponse('Attendance fetched', [
@@ -112,9 +112,9 @@ class AttendanceController extends Controller
 
         $date = $date->format('Y-m-d');
 
-        $attendance = Attendance::where(DB::raw("DATE(date)"),$date)->pluck('user_id');
+        $attendance = Attendance::where(DB::raw("DATE(date)"), $date)->pluck('user_id');
 
-        $users = User::whereNotIn('id', $attendance)->count();
+        $users = User::whereNotIn('id', $attendance)->where('email', '!=', 'superadmin@ecwa.com')->count();
 
         return $this->successResponse('Attendance statistics fetched', $users);
     }

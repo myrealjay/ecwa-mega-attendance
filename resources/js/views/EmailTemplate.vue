@@ -269,5 +269,6 @@ export default {
 
 .select-legnth {
     width: 100px;
+    margin-top: 12px;
 }
 </style>

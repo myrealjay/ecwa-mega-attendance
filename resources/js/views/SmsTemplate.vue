@@ -134,7 +134,7 @@ export default {
                 length:15,
                 currentPage:1
             },
-            lengthData:[1,10,15,20,30,40,50,100]
+            lengthData:[10,15,20,30,40,50,100]
         };
     },
     methods: {
