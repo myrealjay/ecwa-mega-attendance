@@ -18,6 +18,6 @@ export function endpoints() {
         updateEmailTemplate: "/email-templates", //put
         deleteEmailTemplate: "/email-templates", //delete
         userStructre: "/users/structure",
-        last4Sundays:"/attendance/last4sundays"
+        last4Sundays: "/attendance/last4sundays",
     };
 }

@@ -95,7 +95,11 @@
             </div>
             <ul class="chat-list">
               <li class="list active">
-                <div class="profile"><img src="../assets/images/faces/face1.jpg" alt="image"><span class="online"></span></div>
+                <div class="profile">
+                  <img v-if="currentUser.picture" :src="currentUser.picture" alt="image">
+                  <img v-else="currentUser" src="../assets/images/faces/face1.jpg" alt="image">
+                  <span class="online"></span>
+                </div>
                 <div class="info">
                   <p>Thomas Douglas</p>
                   <p>Available</p>
@@ -103,7 +107,10 @@
                 <small class="text-muted my-auto">19 min</small>
               </li>
               <li class="list">
-                <div class="profile"><img src="../assets/images/faces/face2.jpg" alt="image"><span class="offline"></span></div>
+                <div class="profile">
+                  <img v-if="currentUser.picture" :src="currentUser.picture" alt="image">
+                  <img v-else="currentUser" src="../assets/images/faces/face1.jpg" alt="image">
+                <span class="offline"></span></div>
                 <div class="info">
                   <div class="wrapper d-flex">
                     <p>Catherine</p>
@@ -154,6 +161,10 @@
 </template>
 <script lang="ts">
     export default {
-
+      computed: {
+          currentUser() {
+              return this.$store.state.currentUser;
+          },
+      }
     }
 </script>

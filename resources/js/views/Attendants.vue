@@ -11,8 +11,8 @@
                 @change="fetchDataByDate"
             />
         </div>
-        <div v-if="filteredAttendances.length > 0" class="attendance-list">
-            <h3>Attendances on {{ selectedDate }}:</h3>
+        <div v-if="presentAttendees.length > 0" class="attendance-list">
+            <h3>Present Member on {{ selectedDate }}</h3>
             <table>
                 <thead>
                     <tr>
@@ -24,11 +24,11 @@
                 </thead>
                 <tbody>
                     <tr
-                        v-for="(contact, index) in paginatedContacts"
+                        v-for="(contact, index) in paginatedPresent"
                         :key="index"
                     >
                         <td>{{ contact.name }}</td>
-                        <td>{{ contact.phone }}</td>
+                        <td>{{ contact.phone_number }}</td>
                         <td>{{ contact.email }}</td>
                         <td>{{ contact.address }}</td>
                     </tr>
@@ -55,7 +55,53 @@
             </div>
         </div>
         <div v-else>
-            <p>No attendances recorded for the selected date.</p>
+            <p>No present attendees recorded for the selected date.</p>
+        </div>
+        <div v-if="absentAttendees.length > 0" class="attendance-list">
+            <h3>Absent Member on{{ selectedDate }}</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone Number</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr
+                        v-for="(contact, index) in paginatedAbsent"
+                        :key="index"
+                    >
+                        <td>{{ contact.name }}</td>
+                        <td>{{ contact.phone_number }}</td>
+                        <td>{{ contact.email }}</td>
+                        <td>{{ contact.address }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="pagination">
+                <button
+                    @click="prevPageAbsent"
+                    :disabled="currentPageAbsent === 1"
+                    class="previous"
+                >
+                    Previous
+                </button>
+                <span class="pages">
+                    Page {{ currentPageAbsent }} of {{ totalPagesAbsent }}
+                </span>
+                <button
+                    @click="nextPageAbsent"
+                    :disabled="currentPageAbsent === totalPagesAbsent"
+                    class="next"
+                >
+                    Next
+                </button>
+            </div>
+        </div>
+        <div v-else>
+            <p>No absent attendees recorded for the selected date.</p>
         </div>
     </div>
 </template>
@@ -66,24 +112,31 @@ export default {
         return {
             selectedDate: "",
             currentPage: 1,
+            currentPageAbsent: 1,
             pageSize: 10,
-            attendantData: [],
+            presentAttendees: [],
+            absentAttendees: [],
         };
     },
     computed: {
         totalPages() {
-            return Math.ceil(this.filteredAttendances.length / this.pageSize);
+            return Math.ceil(this.presentAttendees.length / this.pageSize);
         },
-        paginatedContacts() {
+        totalPagesAbsent() {
+            return Math.ceil(this.absentAttendees.length / this.pageSize);
+        },
+        paginatedPresent() {
             const startIndex = (this.currentPage - 1) * this.pageSize;
-            return this.filteredAttendances.slice(
+            return this.presentAttendees.slice(
                 startIndex,
                 startIndex + this.pageSize
             );
         },
-        filteredAttendances() {
-            return this.attendantData.filter(
-                (attendance) => attendance.date === this.selectedDate
+        paginatedAbsent() {
+            const startIndex = (this.currentPageAbsent - 1) * this.pageSize;
+            return this.absentAttendees.slice(
+                startIndex,
+                startIndex + this.pageSize
             );
         },
     },
@@ -94,9 +147,8 @@ export default {
                 `${this.endpoints.fetchAttendanceByDate}?date=${this.selectedDate}`
             )
                 .then((response) => {
-                    this.attendantData = response.data.data;
-                    console.log(this.attendantData);
-                    console.log(response.data);
+                    this.presentAttendees = response.data.data.present;
+                    this.absentAttendees = response.data.data.absent;
                 })
                 .catch((error) => {
                     console.log(error.response.data);
@@ -112,6 +164,16 @@ export default {
                 this.currentPage--;
             }
         },
+        nextPageAbsent() {
+            if (this.currentPageAbsent < this.totalPagesAbsent) {
+                this.currentPageAbsent++;
+            }
+        },
+        prevPageAbsent() {
+            if (this.currentPageAbsent > 1) {
+                this.currentPageAbsent--;
+            }
+        },
     },
 };
 </script>
@@ -119,15 +181,21 @@ export default {
 <style>
 .date-select {
     margin-top: 10px;
+    margin-bottom: 20px;
     padding: 5px;
     font-size: 16px;
+    border-radius: 8px;
+}
+.date-select:focus {
+    border: none;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
 }
-h2 {
+h2,
+h3 {
     text-align: center;
     margin-bottom: 30px;
 }
