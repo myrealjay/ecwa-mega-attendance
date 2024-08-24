@@ -51,6 +51,10 @@ export default {
             submittedAttendances: [],
         };
     },
+    mounted()
+    {
+        this.$store.dispatch("fetchContactData");
+    },
     computed: {
         ...mapState(["contactData"]),
         gridColumns() {
