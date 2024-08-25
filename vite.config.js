@@ -6,6 +6,7 @@ export default defineConfig({
     build: {
         outDir: './public_html/build/'
     },
+    base: '/build/',
     plugins: [
         laravel({
             publicDirectory: 'public_html',

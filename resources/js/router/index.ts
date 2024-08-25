@@ -14,7 +14,7 @@ import AddMessage from "../views/AddMessage.vue";
 const store = appStore();
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
+    history: createWebHistory('/build/'),
     routes: [
         {
             path: "/",

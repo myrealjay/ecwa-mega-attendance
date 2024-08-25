@@ -63,10 +63,10 @@ Route::group(['middleware' => ['auth:sanctum']], function() {
     });
 
     Route::group(['prefix' => 'sms-templates'], function() {
-        Route::get('', [SmsTemplateController::class, 'index'])->name('getTemplates');
-        Route::post('', [SmsTemplateController::class, 'store'])->name('storeTemplates');
-        Route::put('{id}', [SmsTemplateController::class, 'update'])->name('updateTemplates');
-        Route::delete('{id}', [SmsTemplateController::class, 'delete'])->name('deleteTemplates');
+        Route::get('', [SmsTemplateController::class, 'index'])->name('getSmsTemplates');
+        Route::post('', [SmsTemplateController::class, 'store'])->name('storeSmsTemplates');
+        Route::put('{id}', [SmsTemplateController::class, 'update'])->name('updateSmsTemplates');
+        Route::delete('{id}', [SmsTemplateController::class, 'delete'])->name('deleteSmsTemplates');
     });
 
     Route::group(['prefix' => 'recipients'], function() {
