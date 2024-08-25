@@ -16,7 +16,7 @@ export function makeRequest(method = 'GET', url = "", params = {}, body={}, down
         return response;
     }, (error) => {
         if (error.response) {
-            if (error.response.status === 401) {
+            if (error.response.status === 401 && !(window.location.pathname === '/build/')) {
                 store.commit('logout');
                 window.location = "/";
             }
