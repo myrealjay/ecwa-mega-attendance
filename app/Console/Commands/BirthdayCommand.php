@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Classes\FollowUp;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class BirthdayCommand extends Command
 {
@@ -28,6 +29,8 @@ class BirthdayCommand extends Command
      */
     public function handle()
     {
+        Log::info('Birthday crone started');
+        
         $followUp = new FollowUp();
         $followUp->celebrateBirthday();
         $followUp->celebrateAnniversary();
