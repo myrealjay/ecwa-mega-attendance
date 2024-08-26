@@ -117,8 +117,13 @@ export default {
             this.error = "";
             this.makeRequest("POST", this.endpoints.login, {}, this.form)
                 .then((response) => {
-                    this.$store.commit("loginSuccess", response.data.data);
-                    window.location = "/home";
+                    if (response.data.status === 401) {
+                        this.error = response.data.message;
+                    } else {
+                        this.$store.commit("loginSuccess", response.data.data);
+
+                        window.location = "/home";
+                    }
                 })
                 .catch((error) => {
                     if (error.response) {
