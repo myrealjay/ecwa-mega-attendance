@@ -37,5 +37,11 @@ export function sideBarRoutes() {
             name: "attendants",
             roles: ["Super Admin", "Admin"],
         },
+        {
+            title: "Follow-up Committee",
+            icon: "mdi mdi-marker-check",
+            name: "committee",
+            roles: ["Super Admin", "Admin"],
+        },
     ];
 }

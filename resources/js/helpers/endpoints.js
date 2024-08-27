@@ -21,6 +21,7 @@ export function endpoints() {
         last4Sundays: "/attendance/last4sundays",
         userCount: "/users/count",
         totalPresent: "/attendance/total-present",
-        totalAbsent: "/attendance/total-absent"
+        totalAbsent: "/attendance/total-absent",
+        recipients: "/recipients"
     };
 }
