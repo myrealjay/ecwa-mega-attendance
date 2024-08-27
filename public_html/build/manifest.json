@@ -7,20 +7,20 @@
     "file": "assets/Pagination-32510304.css",
     "src": "Pagination.css"
   },
-  "_Message-96efe154.js": {
+  "_Message-24125592.js": {
     "css": [
       "assets/Message-c9b9b59f.css"
     ],
-    "file": "assets/Message-96efe154.js",
+    "file": "assets/Message-24125592.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_Pagination-89c634d6.js": {
+  "_Pagination-9a5c95fe.js": {
     "css": [
       "assets/Pagination-32510304.css"
     ],
-    "file": "assets/Pagination-89c634d6.js",
+    "file": "assets/Pagination-9a5c95fe.js",
     "imports": [
       "resources/js/app.js"
     ]
@@ -56,9 +56,10 @@
       "resources/js/views/Members.vue",
       "resources/js/views/Attendance.vue",
       "resources/js/views/Attendants.vue",
-      "resources/js/views/MemberDetails.vue"
+      "resources/js/views/MemberDetails.vue",
+      "resources/js/views/FollowUpCommittee.vue"
     ],
-    "file": "assets/app-e0d3e6ef.js",
+    "file": "assets/app-55f02c0c.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
@@ -110,7 +111,7 @@
     "css": [
       "assets/Attendance-c0fbade3.css"
     ],
-    "file": "assets/Attendance-0f4749fc.js",
+    "file": "assets/Attendance-a2583837.js",
     "imports": [
       "resources/js/app.js"
     ],
@@ -125,7 +126,7 @@
     "css": [
       "assets/Attendants-5b2ece73.css"
     ],
-    "file": "assets/Attendants-dfe05b10.js",
+    "file": "assets/Attendants-a804d766.js",
     "imports": [
       "resources/js/app.js"
     ],
@@ -140,14 +141,29 @@
     "css": [
       "assets/EmailTemplate-faf57aee.css"
     ],
-    "file": "assets/EmailTemplate-0e3c35b8.js",
+    "file": "assets/EmailTemplate-1b0114c1.js",
     "imports": [
       "resources/js/app.js",
-      "_Message-96efe154.js",
-      "_Pagination-89c634d6.js"
+      "_Message-24125592.js",
+      "_Pagination-9a5c95fe.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/EmailTemplate.vue"
+  },
+  "resources/js/views/FollowUpCommittee.css": {
+    "file": "assets/FollowUpCommittee-d81ed004.css",
+    "src": "resources/js/views/FollowUpCommittee.css"
+  },
+  "resources/js/views/FollowUpCommittee.vue": {
+    "css": [
+      "assets/FollowUpCommittee-d81ed004.css"
+    ],
+    "file": "assets/FollowUpCommittee-f93b96aa.js",
+    "imports": [
+      "resources/js/app.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/views/FollowUpCommittee.vue"
   },
   "resources/js/views/MemberDetails.css": {
     "file": "assets/MemberDetails-0ffe0656.css",
@@ -157,7 +173,7 @@
     "css": [
       "assets/MemberDetails-0ffe0656.css"
     ],
-    "file": "assets/MemberDetails-2c999cac.js",
+    "file": "assets/MemberDetails-f7c78a92.js",
     "imports": [
       "resources/js/app.js"
     ],
@@ -172,10 +188,10 @@
     "css": [
       "assets/Members-7daf1dfc.css"
     ],
-    "file": "assets/Members-42a51837.js",
+    "file": "assets/Members-10ac0d8f.js",
     "imports": [
       "resources/js/app.js",
-      "_Pagination-89c634d6.js"
+      "_Pagination-9a5c95fe.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/Members.vue"
@@ -188,11 +204,11 @@
     "css": [
       "assets/SmsTemplate-9f68ff1a.css"
     ],
-    "file": "assets/SmsTemplate-7fb4bef0.js",
+    "file": "assets/SmsTemplate-d509bb9a.js",
     "imports": [
       "resources/js/app.js",
-      "_Message-96efe154.js",
-      "_Pagination-89c634d6.js"
+      "_Message-24125592.js",
+      "_Pagination-9a5c95fe.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/SmsTemplate.vue"

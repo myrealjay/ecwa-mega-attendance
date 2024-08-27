@@ -14,7 +14,11 @@ class RecipientController extends Controller
     {
         return $this->successResponse(
             'Recipients fetched successfully', 
-            Recipient::with('user:id,first_name,last_name')->get()
+            Recipient::selectRaw('users.id as user_id, concat(users.first_name," ", users.last_name) as name')
+            ->join('users', 'users.id', '=', 'recipients.user_id')->get()->map(function($data) {
+                $data['name'] = ucwords($data['name']);
+                return $data;
+            })
         );
     }
 
@@ -24,6 +28,8 @@ class RecipientController extends Controller
             'users' => ['required', 'array'],
             'users.*' => ['required', 'exists:users,id']
         ]);
+
+        Recipient::query()->delete();
 
         foreach($request->users as $user) {
             Recipient::firstOrCreate([
@@ -44,7 +50,7 @@ class RecipientController extends Controller
             'users.*' => ['required', 'exists:users,id']
         ]);
 
-        Recipient::whereIn('id', $request->users)->delete();
+        Recipient::whereIn('user_id', $request->users)->delete();
 
         return $this->successResponse(
             'Recipients removed successfully', 

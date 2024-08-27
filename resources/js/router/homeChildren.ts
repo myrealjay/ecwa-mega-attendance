@@ -38,6 +38,11 @@ const childRoutes = [
         component: () => import("../views/MemberDetails.vue"),
         props: true,
     },
+    {
+        path: "/committee",
+        name: "committee",
+        component: () => import("../views/FollowUpCommittee.vue")
+    },
 ];
 
 export function homeChildren() {
