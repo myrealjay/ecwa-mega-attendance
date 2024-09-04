@@ -10,6 +10,7 @@ use App\Models\EmailTemplate;
 use App\Models\Recipient;
 use App\Models\SmsTemplate;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -120,7 +121,8 @@ class FollowUp
 
     public function celebrateBirthday() : void
     {
-        $celebrants = User::whereDate('dob', $this->today)->get();
+        $today = Carbon::today();
+        $celebrants = User::whereMonth('dob', $today->month)->whereDay('dob', $today->day)->get();
         $celebrantCategory = EmailCategory::find(4);
         $birthdayCategory = EmailCategory::find(3);
 
@@ -134,7 +136,8 @@ class FollowUp
 
     public function celebrateAnniversary() : void
     {
-        $celebrants = User::whereDate('wedding_date', $this->today)->get();
+        $today = Carbon::today();
+        $celebrants = User::whereMonth('wedding_date', $today->month)->whereDay('wedding_date', $today->day)->get();
         $celebrantCategory = EmailCategory::find(6);
         $birthdayCategory = EmailCategory::find(5);
         
