@@ -54,7 +54,8 @@ class AttendanceController extends Controller
         $present = User::whereIn('id', $attendedUserIds)
         ->orderBy('first_name', 'ASC')->get();
         
-        $absent = User::where('id', '!=', 'superadmin@ecwa.com')->whereNotIn('id', $attendedUserIds)
+        $absent = User::whereNotIn('email', ['superadmin@ecwa.com', 'admin@ecwamegagbgada.com'])
+        ->whereNotIn('id', $attendedUserIds)
         ->orderBy('first_name', 'ASC')->get();
 
         return $this->successResponse('Attendance fetched', [
@@ -79,7 +80,8 @@ class AttendanceController extends Controller
             $date->modify('-1 week');
         }
 
-        $attendance = Attendance::selectRaw('DATE(date) as date, count(*) as total')->whereIn(DB::raw("DATE(date)"),$sundays)->groupBy('date')->get();
+        $attendance = Attendance::selectRaw('DATE(date) as date, count(*) as total')
+        ->whereIn(DB::raw("DATE(date)"),$sundays)->groupBy('date')->get();
 
         return $this->successResponse('Attendance statistics fetched', $attendance);
     }
@@ -114,7 +116,8 @@ class AttendanceController extends Controller
 
         $attendance = Attendance::where(DB::raw("DATE(date)"), $date)->pluck('user_id');
 
-        $users = User::whereNotIn('id', $attendance)->where('email', '!=', 'superadmin@ecwa.com')->count();
+        $users = User::whereNotIn('id', $attendance)
+        ->whereNotIn('email', ['superadmin@ecwa.com', 'admin@ecwamegagbgada.com'])->count();
 
         return $this->successResponse('Attendance statistics fetched', $users);
     }
