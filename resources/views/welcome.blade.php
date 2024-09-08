@@ -5,7 +5,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>ECWA MEGA CHAPEL GBAGADA</title>
 
-         <link rel="stylesheet" href="{{ asset('assets/vendors/feather/feather.css') }}">
+        <link rel="icon" href="{{ asset('favicon.ico?v=1') }}" type="image/x-icon"/>
+        <link rel="stylesheet" href="{{ asset('assets/vendors/feather/feather.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendors/ti-icons/css/themify-icons.css') }}">
         <link rel="stylesheet" href="{{ asset('assets/vendors/css/vendor.bundle.base.css') }}">
         <!-- endinject -->
