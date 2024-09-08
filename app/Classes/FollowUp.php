@@ -43,6 +43,7 @@ class FollowUp
         
         foreach($absentPeople as $absentPerson) {
             if ($smsTemplate) {
+                Log::info('Sending text messages to absent people');
                 try {
                     $smsSender->send([$absentPerson->phone_number], $smsTemplate, $absentPerson);
                 } catch(\Exception $e) {
@@ -51,6 +52,7 @@ class FollowUp
             }
 
             if ($template) {
+                Log::info('Sending emails to absent people');
                 try {
                     Mail::to($absentPerson->email)->send(new FollowUpMail($absentPerson, $template, 'Absent From Service'));
                 } catch(\Exception $e) {
@@ -64,6 +66,7 @@ class FollowUp
 
     protected function notifyRecipients($absentPeople)
     {
+        Log::info('Notifying followup committee');
         $data = "<ul>";
         foreach($absentPeople as $absentPerson) {
             $data .= "<li>{$absentPerson->name} {$absentPerson->phone_number} {$absentPerson->email}</li>";
@@ -100,6 +103,7 @@ class FollowUp
         $attendances = Attendance::with('user')->whereDate('date', $this->today)->get();
         foreach($attendances as $attendance) {
             if ($template) {
+                Log::info('Sending text messages to present people');
                 try {
                     Mail::to($attendance->user->email)->send(new FollowUpMail($attendance->user, $template, 'Thank You For Coming'));
                 } catch(\Exception $e) {
@@ -108,6 +112,7 @@ class FollowUp
             }
 
             if ($smsTemplate) {
+                Log::info('Sending emails to present people');
                 try {
                     $smsSender->send([$attendance->user->phone_number], $smsTemplate, $attendance->user);
                 } catch(\Exception $e) {
@@ -176,7 +181,9 @@ class FollowUp
             if($celebrantCategory) {
                 if ($celebrantTemplate) {
                     try {
-                        Mail::to($celebrant->email)->send(new FollowUpMail($celebrant, $celebrantTemplate, $subject));
+                        if (!empty($celebrant->email)) {
+                            Mail::to($celebrant->email)->send(new FollowUpMail($celebrant, $celebrantTemplate, $subject));
+                        }
                     } catch(\Exception $e) {
                         Log::error($e);
                     }
@@ -184,7 +191,9 @@ class FollowUp
 
                 if ($celebrantSmsTemplate) {
                     try {
-                        $smsSender->send([$celebrant->phone_number], $celebrantSmsTemplate, $celebrant);
+                        if (!empty($celebrant->phone_number)) {
+                            $smsSender->send([$celebrant->phone_number], $celebrantSmsTemplate, $celebrant);
+                        }
                     } catch(\Exception $e) {
                         Log::error($e);
                     }
@@ -194,7 +203,9 @@ class FollowUp
             //Send to other people
             if ($birthdayCategory) {
                 if ($birthdayTemplate) {
-                    $emails = $users->pluck('email');
+                    $emails = $users->pluck('email')->filter(function($email) {
+                        return !empty($email);
+                    })->values()->toArray();
 
                     try {
                         Mail::to($emails)->send(new FollowUpMail($celebrant, $birthdayTemplate, $subject));

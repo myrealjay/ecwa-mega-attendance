@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Classes\FollowUp as MyFollowUp;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class FollowUp extends Command
 {
@@ -28,8 +29,10 @@ class FollowUp extends Command
      */
     public function handle()
     {
+        Log::info('FollowUp command started');
         $followUp = new MyFollowUp();
         $followUp->checkUpOnAbsentPeople();
         $followUp->congratulatePresentPeople();
+        Log::info('FollowUp command ended');
     }
 }

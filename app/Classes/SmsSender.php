@@ -12,7 +12,8 @@ class SmsSender
     public function send($phoneNumbers = [], SmsTemplate $template , User $user) : void
     {
         $body = (new TemplateParser())->parse($template->template, $user);
-        $phones = implode(",", $phoneNumbers);
+        $phoneNumbers = $this->formatNumbers($phoneNumbers);
+        $phones = rtrim(implode(",", $phoneNumbers), ',');
 
         $sms = SmsMessage::create([
             'phone_number' => $phones,
@@ -22,7 +23,7 @@ class SmsSender
         
         $data = [
             'api_token' => config('services.bulksmsnigeria.api_token'),
-            'from' => 'BulkSMS.ng',
+            'from' => 'ECWAMEGA',
             'to' => $phones,
             "gateway" => "direct-refund",
             'body' => $body,
@@ -33,5 +34,22 @@ class SmsSender
         Log::info('Sending SMS to '.$phones);
 
         $response = Http::post(config('services.bulksmsnigeria.url'), $data)->json();
+    }
+
+    protected function formatNumbers(array $numbers) : array
+    {
+        $numbers = collect($numbers)->map(function(?string $number) {
+            $number = ltrim($number, '0');
+            $number = ltrim($number, '+2340');
+            $number = ltrim($number, '+234');
+            $number = ltrim($number, '2340');
+            $number = ltrim($number, '234');
+            $number = $number ? trim('234'.$number) : '';
+            return $number;
+        })->reject(function ($number) {
+            return empty($number);
+        })->toArray();
+
+        return $numbers;
     }
 }
