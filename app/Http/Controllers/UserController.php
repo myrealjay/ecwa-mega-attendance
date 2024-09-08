@@ -17,7 +17,10 @@ class UserController extends Controller
         $sort = $request->sort ?? 'first_name';
         $sortDirection = $request->sort_direction ?? 'ASC';
 
-        $users = User::query()->whereNotIn('email', ['superadmin@ecwa.com', 'admin@ecwamegagbagada.com'])
+        $users = User::query()->where(function($query) {
+            return $query->where('email', '!=' ,'admin@ecwamegagbagada.com')
+            ->orWhere('email', null);
+        })
             ->when(!empty($search), function($query) use($search) {
             return $query->where('first_name', 'LIKE', '%'.$search.'%')
             ->orWhere('last_name', 'LIKE', '%'.$search.'%')
@@ -46,13 +49,19 @@ class UserController extends Controller
 
     public function getUsers()
     {
-        $users = User::whereNotIn('email', ['superadmin@ecwa.com', 'admin@ecwamegagbagada.com'])->get();
+        $users = User::where(function($query) {
+            return $query->where('email', '!=' ,'admin@ecwamegagbagada.com')
+            ->orWhere('email', null);
+        })->get();
         return $this->successResponse('Users fetched successfully', $users);
     }
 
     public function count()
     {
-        $users = User::whereNotIn('email', ['superadmin@ecwa.com', 'admin@ecwamegagbagada.com'])->count();
+        $users = User::where(function($query) {
+            return $query->where('email', '!=' ,'admin@ecwamegagbagada.com')
+            ->orWhere('email', null);
+        })->count();
 
         return $this->successResponse('user Count fetched successfully', $users);
     }
