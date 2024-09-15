@@ -98,9 +98,9 @@ class AttendanceController extends Controller
         $date = $date->format('Y-m-d');
 
         $attendance = Attendance::selectRaw('DATE(date) as date, count(*) as total')
-        ->where(DB::raw("DATE(date)"),$date)->count();
+        ->where(DB::raw("DATE(date)"), $date)->count();
 
-        return $this->successResponse('Attendance statistics fetched', $attendance);
+        return $this->successResponse('Attendance statistics fetched', $attendance ?? 0);
     }
 
     public function totalAbsentLastSunday()
@@ -116,8 +116,11 @@ class AttendanceController extends Controller
 
         $attendance = Attendance::where(DB::raw("DATE(date)"), $date)->pluck('user_id');
 
-        $users = User::whereNotIn('id', $attendance)
-        ->whereNotIn('email', ['superadmin@ecwa.com', 'admin@ecwamegagbagada.com'])->count();
+        $users = User::whereNotIn('id', $attendance ?? 0)
+        ->where(function($query) {
+            return $query->whereNotIn('email', ['superadmin@ecwa.com', 'admin@ecwamegagbagada.com']);
+        })
+        ->count();
 
         return $this->successResponse('Attendance statistics fetched', $users);
     }
