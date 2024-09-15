@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Classes\FollowUp as MyFollowUp;
+use DateTime;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -30,9 +31,18 @@ class FollowUp extends Command
     public function handle()
     {
         Log::info('FollowUp command started');
-        $followUp = new MyFollowUp();
-        $followUp->checkUpOnAbsentPeople();
-        $followUp->congratulatePresentPeople();
+
+        $date = new DateTime();
+
+        if ($date->format('N') === 7) {
+            Log::info('Today is sunday so I will run');
+            $followUp = new MyFollowUp();
+            $followUp->checkUpOnAbsentPeople();
+            $followUp->congratulatePresentPeople();
+        } else {
+            Log::info('Today is not sunday so chill');
+        }
+    
         Log::info('FollowUp command ended');
     }
 }
