@@ -32,9 +32,7 @@ trait HasResponse
             'message' => $message
         ];
 
-        if (! empty($data)) {
-            $response['data'] = $data;
-        }
+        $response['data'] = $data;
 
         return Response::json($response);
     }
