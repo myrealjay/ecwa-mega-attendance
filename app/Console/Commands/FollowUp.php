@@ -34,7 +34,7 @@ class FollowUp extends Command
 
         $date = new DateTime();
 
-        if ($date->format('N') === 7) {
+        if ($date->format('N') == 7) {
             Log::info('Today is sunday so I will run');
             $followUp = new MyFollowUp();
             $followUp->checkUpOnAbsentPeople();
