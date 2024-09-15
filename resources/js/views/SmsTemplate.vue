@@ -52,9 +52,15 @@
         >
             <div>
                 <div>
-                    <b>You can use any of these attributes:</b><br />{{
-                        getAttributes()
-                    }}
+                    <b>You can use any of these attributes:</b><br />
+                    <button 
+                        class="btn btn-info" v-for="attr in getAttributes()" 
+                        style="margin: 2px;"
+                        :key="attr"
+                        @click="addAttribute(attr)"
+                    >
+                        {{ attr }}
+                    </button>
                 </div>
                 <div class="line"></div>
                 <SingleSelect
@@ -138,6 +144,9 @@ export default {
         };
     },
     methods: {
+        addAttribute(attr) {
+            this.smsTemplate.template += attr;
+        },
         setPage(page) {
             this.tableData.currentPage = page;
             this.fetchTemplates();
@@ -165,7 +174,9 @@ export default {
                 attributes += `$${value}$ , `;
             }
 
-            return attributes;
+            let attributeArray = attributes.split(',');
+
+            return attributeArray;
         },
         addSmsTemplate() {
             this.showLoader();
