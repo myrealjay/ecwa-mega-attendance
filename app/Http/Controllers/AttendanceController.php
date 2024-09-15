@@ -95,7 +95,6 @@ class AttendanceController extends Controller
         $date->modify('last Sunday');
 
         $date = $date->format('Y-m-d');
-        Log::info($date);
 
         $attendance = Attendance::selectRaw('DATE(date) as date, count(*) as total')
         ->where(DB::raw("DATE(date)"), $date)->count();
