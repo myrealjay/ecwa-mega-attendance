@@ -19,7 +19,7 @@ class Kernel extends ConsoleKernel
         ->everyMinute()
         ->withoutOverlapping();
         
-        $schedule->command('members:followup')->weeklyOn(0, '14:00');
+        $schedule->command('members:followup')->dailyAt('13:00');
         $schedule->command('members:birthday')->daily();
     }
 
