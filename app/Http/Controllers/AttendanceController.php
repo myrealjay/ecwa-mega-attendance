@@ -71,9 +71,10 @@ class AttendanceController extends Controller
         $date = new DateTime();
 
         // Find the most recent Sunday
-        if ($date->format('N') != 7) {
-            $date->modify('last Sunday');
-        }
+        // if ($date->format('N') != 7) {
+        // }
+
+        $date->modify('last Sunday');
 
         // Add the last 4 Sundays to the array
         for ($i = 0; $i < 4; $i++) {
@@ -91,10 +92,7 @@ class AttendanceController extends Controller
     {
         $date = new DateTime();
 
-        // Find the most recent Sunday
-        if ($date->format('N') != 7) {
-            $date->modify('last Sunday');
-        }
+        $date->modify('last Sunday');
 
         $date = $date->format('Y-m-d');
         Log::info($date);
@@ -109,10 +107,7 @@ class AttendanceController extends Controller
     {
         $date = new DateTime();
 
-        // Find the most recent Sunday
-        if ($date->format('N') != 7) {
-            $date->modify('last Sunday');
-        }
+        $date->modify('last Sunday');
 
         $date = $date->format('Y-m-d');
 
