@@ -7,6 +7,7 @@ export function endpoints() {
         getCategories: "/email-categories",
         fetchAttendanceByDate: "/attendance/by-date",
         takeAttendance: "/attendance",
+        fetchAttendance: "/attendance/all",
         fetchUsers: "/users",
         fetchAllUsers: "/users/all",
         createSmsTemplate: "/sms-templates", //Post
