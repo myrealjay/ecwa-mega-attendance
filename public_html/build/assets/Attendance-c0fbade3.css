@@ -1,1 +1,0 @@
-.grid-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}.grid-item{padding:10px;border:1px solid #ccc}button{margin-top:10px;cursor:pointer}label{display:flex;align-items:center}label>p{color:#fff;margin-left:10px;align-self:center}input{align-self:center}

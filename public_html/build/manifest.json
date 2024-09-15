@@ -7,20 +7,20 @@
     "file": "assets/Pagination-32510304.css",
     "src": "Pagination.css"
   },
-  "_Message-d0100340.js": {
+  "_Message-31825646.js": {
     "css": [
       "assets/Message-c9b9b59f.css"
     ],
-    "file": "assets/Message-d0100340.js",
+    "file": "assets/Message-31825646.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_Pagination-d05d65c6.js": {
+  "_Pagination-db4fd869.js": {
     "css": [
       "assets/Pagination-32510304.css"
     ],
-    "file": "assets/Pagination-d05d65c6.js",
+    "file": "assets/Pagination-db4fd869.js",
     "imports": [
       "resources/js/app.js"
     ]
@@ -55,11 +55,10 @@
       "resources/js/views/SmsTemplate.vue",
       "resources/js/views/Members.vue",
       "resources/js/views/Attendance.vue",
-      "resources/js/views/Attendants.vue",
       "resources/js/views/MemberDetails.vue",
       "resources/js/views/FollowUpCommittee.vue"
     ],
-    "file": "assets/app-05d0b7e5.js",
+    "file": "assets/app-788a9215.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
@@ -104,34 +103,19 @@
     "src": "resources/js/assets/images/megalogo.jpg"
   },
   "resources/js/views/Attendance.css": {
-    "file": "assets/Attendance-c0fbade3.css",
+    "file": "assets/Attendance-6df4d2f8.css",
     "src": "resources/js/views/Attendance.css"
   },
   "resources/js/views/Attendance.vue": {
     "css": [
-      "assets/Attendance-c0fbade3.css"
+      "assets/Attendance-6df4d2f8.css"
     ],
-    "file": "assets/Attendance-4702de9b.js",
+    "file": "assets/Attendance-d231b071.js",
     "imports": [
       "resources/js/app.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/Attendance.vue"
-  },
-  "resources/js/views/Attendants.css": {
-    "file": "assets/Attendants-5b2ece73.css",
-    "src": "resources/js/views/Attendants.css"
-  },
-  "resources/js/views/Attendants.vue": {
-    "css": [
-      "assets/Attendants-5b2ece73.css"
-    ],
-    "file": "assets/Attendants-256ce6a4.js",
-    "imports": [
-      "resources/js/app.js"
-    ],
-    "isDynamicEntry": true,
-    "src": "resources/js/views/Attendants.vue"
   },
   "resources/js/views/EmailTemplate.css": {
     "file": "assets/EmailTemplate-faf57aee.css",
@@ -141,11 +125,11 @@
     "css": [
       "assets/EmailTemplate-faf57aee.css"
     ],
-    "file": "assets/EmailTemplate-967eae60.js",
+    "file": "assets/EmailTemplate-8e997754.js",
     "imports": [
       "resources/js/app.js",
-      "_Message-d0100340.js",
-      "_Pagination-d05d65c6.js"
+      "_Message-31825646.js",
+      "_Pagination-db4fd869.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/EmailTemplate.vue"
@@ -158,7 +142,7 @@
     "css": [
       "assets/FollowUpCommittee-d81ed004.css"
     ],
-    "file": "assets/FollowUpCommittee-1e9fba02.js",
+    "file": "assets/FollowUpCommittee-582773a0.js",
     "imports": [
       "resources/js/app.js"
     ],
@@ -173,7 +157,7 @@
     "css": [
       "assets/MemberDetails-0ffe0656.css"
     ],
-    "file": "assets/MemberDetails-c66d9cd9.js",
+    "file": "assets/MemberDetails-e568217d.js",
     "imports": [
       "resources/js/app.js"
     ],
@@ -188,10 +172,10 @@
     "css": [
       "assets/Members-7daf1dfc.css"
     ],
-    "file": "assets/Members-f366b341.js",
+    "file": "assets/Members-84a62242.js",
     "imports": [
       "resources/js/app.js",
-      "_Pagination-d05d65c6.js"
+      "_Pagination-db4fd869.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/Members.vue"
@@ -204,11 +188,11 @@
     "css": [
       "assets/SmsTemplate-9f68ff1a.css"
     ],
-    "file": "assets/SmsTemplate-e4969a6d.js",
+    "file": "assets/SmsTemplate-fa07fc5f.js",
     "imports": [
       "resources/js/app.js",
-      "_Message-d0100340.js",
-      "_Pagination-d05d65c6.js"
+      "_Message-31825646.js",
+      "_Pagination-db4fd869.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/SmsTemplate.vue"

@@ -46,6 +46,21 @@ class AttendanceController extends Controller
         return $this->successResponse('Attendeance record saved', []);
     }
 
+    public function fetchAttendance()
+    {
+        return $this->successResponse(
+            'Attendance fetched successfully', 
+            Attendance::selectRaw('users.id as id, concat(users.first_name," ", users.last_name) as name')
+            ->join('users', 'users.id', '=', 'attendances.user_id')
+            ->whereDate('date', date('Y-m-d'))
+            ->get()
+            ->map(function($data) {
+                $data['name'] = ucwords($data['name']);
+                return $data;
+            })
+        );
+    }
+
     public function attendanceByDate(Request $request)
     {
         $request->validate(['date' => ['required', 'date']]);
