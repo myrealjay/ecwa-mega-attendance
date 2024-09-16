@@ -46,88 +46,73 @@
     </div>
 </template>
 
-<script>
-import { mapState } from "vuex";
-import Attendants from './Attendants.vue';
-export default {
-    data() {
-        return {
-            selectedContacts: [],
-            submittedAttendances: [],
-        };
-    },
-    mounted()
-    {
-        this.$store.dispatch("fetchContactData");
-    },
-    created() {
-        this.makeRequest('GET', this.endpoints.fetchAttendance).then(response => {
-            this.selectedContacts = response.data.data;
+<script setup>
+    import Attendants from './Attendants.vue';
+    import {ref, onMounted, onBeforeMount, computed} from 'vue';
+    import { useStore } from 'vuex'
+    import { sweetAlert } from "../helpers/alerts.js";
+    import { makeRequest } from '../helpers/requester.js'
+    import { endpoints } from "../helpers/endpoints.js";
+    import { showLoader, hideLoader } from "../helpers/loaders";
+
+
+    const selectedContacts = ref([]);
+    const submittedAttendances = ref([])
+    const store = useStore();
+
+    onMounted(() => {
+        store.dispatch("fetchContactData");
+    })
+
+    onBeforeMount(() => {
+        makeRequest('GET', endpoints().fetchAttendance).then(response => {
+            selectedContacts.value = response.data.data;
         })
-    },
-    components:{
-        Attendants
-    },
-    computed: {
-        ...mapState(["contactData"]),
-        gridColumns() {
-            return Math.ceil(this.contacts.length / 20);
-        },
+    })
 
-        gridRows() {
-            const rows = [];
-            for (let i = 0; i < this.gridColumns; i++) {
-                rows.push(this.contacts.slice(i * 20, (i + 1) * 20));
-            }
-            return rows;
-        },
+    const contactData = computed(() => {
+        return store.state.contactData;
+    })
 
-        allUsers() {
-            this.users = [];
-            this.contactData.forEach(contact => {
-                this.users.push({id:contact.id, name:contact.name})
+    const allUsers = computed(() => {
+        let users = [];
+        contactData.value.forEach(contact => {
+            users.push({id:contact.id, name:contact.name})
+        })
+
+        return users;
+    });
+
+    function submitAttendance() {
+        let record = [];
+        // Create attendance records for selected contacts
+        selectedContacts.value.forEach((contact) => {
+            record.push(contact.id);
+        });
+
+        showLoader();
+        makeRequest(
+            "POST",
+            endpoints().takeAttendance,
+            {},
+            { users: record }
+        )
+            .then((response) => {
+                hideLoader();
+                sweetAlert().success('Attendance successfully submitted');
             })
-
-            return this.users;
-        }
-    },
-    methods: {
-        submitAttendance() {
-            let record = [];
-            // Create attendance records for selected contacts
-            this.selectedContacts.forEach((contact) => {
-                record.push(contact.id);
+            .catch((error) => {
+                hideLoader();
+                if (error.response) {
+                    sweetAlert().error(
+                        error.response.data.message
+                    );
+                } else {
+                    sweetAlert().error(error);
+                }
             });
+    }
 
-            this.errors = {};
-            this.showLoader();
-            this.makeRequest(
-                "POST",
-                this.endpoints.takeAttendance,
-                {},
-                { users: record }
-            )
-                .then((response) => {
-                    this.hideLoader();
-                    this.sweetAlert().success('Attendance successfully submitted');
-                })
-                .catch((error) => {
-                    this.hideLoader();
-                    if (error.response) {
-                        if (!error.response.data.data) {
-                            this.sweetAlert().error(
-                                error.response.data.message
-                            );
-                        } else {
-                            this.errors = error.response.data.data;
-                        }
-                    } else {
-                        this.sweetAlert().error(error);
-                    }
-                });
-        },
-    },
-};
 </script>
 
 <style>
