@@ -11,6 +11,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\ResetLinkRequest;
 use App\Http\Requests\ResetPasswordRequest;
+use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Traits\HasResponse;
@@ -41,6 +42,15 @@ class AuthController extends Controller
         }
 
         return RegisterAction::new($data)->execute();
+    }
+
+    public function update(UpdateUserRequest $request, int $userId)
+    {
+        $user = User::findOrFail($userId);
+
+        $user->update($request->validated());
+
+        return $this->successResponse('User Updatd successfully', $user);
     }
 
     public function login(LoginRequest $request)

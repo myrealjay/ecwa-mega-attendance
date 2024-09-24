@@ -10,26 +10,42 @@
             </div>
         </div>
         <div class="profile-details">
-            <p><strong>Phone Number:</strong> {{ contact.phone_number }}</p>
-            <p><strong>Email:</strong> {{ contact.email }}</p>
-            <p><strong>Address:</strong> {{ contact.address }}</p>
-            <p><strong>Date of Birth:</strong> {{ contact.dob }}</p>
-            <p><strong>Occupation:</strong> {{ contact.occupation }}</p>
-            <p><strong>Wedding Date:</strong> {{ contact.wedding_date }}</p>
+            <TextField label="Phone Number" v-model="contact.phone_number" 
+            :error="errors.phone_number ? errors.phone_number[0] : ''"/>
+
+            <TextField label="Email" v-model="contact.email" :error="errors.email ? errors.email[0] : ''"/>
+            <TextField label="Address" v-model="contact.address" :error="errors.address ? errors.address[0] : ''"/>
+
+            <DateTimeField label="DOB" v-model="contact.dob" :error="errors.dob ? errors.dob[0] : ''"/>
+            <DateTimeField label="Wedding Date" v-model="contact.wedding_date" 
+            :error="errors.wedding_date ? errors.wedding_date[0] : ''"/>
 
             <div class="picture">
                 <img v-if="contact.picture" :src="contact.picture" width="400" />
             </div>
+
+            <Button
+                    icon="mdi-send"
+                    text="Register"
+                    color="primary"
+                    @buttonClicked="updateUser()"
+                />
         </div>
     </div>
 </template>
 
 <script>
+import TextField from "../components/TextField.vue";
+import DateTimeField from "../components/DateTimeField.vue";
+import Button from "../components/Button.vue";
+
 export default {
+    components:{TextField, DateTimeField, Button},
     props: ["id"],
     data() {
         return {
             contact: {},
+            errors: {},
         };
     },
     created() {
@@ -46,6 +62,26 @@ export default {
                     console.log(error.response);
                 });
         },
+
+        updateUser() {
+            this.errors = {};
+            this.showLoader();
+            this.makeRequest("PUT", this.endpoints.updateUser+'/'+this.contact.id, {}, this.contact)
+                .then((response) => {
+                    this.sweetAlert().success("Member Updated successfully");
+                })
+                .catch((error) => {
+                    console.log(error.response.data);
+                    if (error.response) {
+                        this.errors = error.response.data.data
+                    }
+
+                    this.sweetAlert().error("Error Updated User");
+                })
+                .finally(() => {
+                    this.hideLoader();
+                });
+        }
     },
 };
 </script>
@@ -59,6 +95,7 @@ export default {
     background: #fff;
     border-radius: 8px;
     padding:15px;
+    overflow: auto;
 }
 .profile-header {
     display: flex;
@@ -75,6 +112,7 @@ export default {
 .profile-details {
     flex: 1;
     padding-right: 20px;
+    padding-left: 20px;
 }
 
 .profile-picture img {

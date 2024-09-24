@@ -104,9 +104,7 @@
                     <DateTimeField
                         label="Wedding Date"
                         v-model="form.wedding_date"
-                        :error="
-                            errors.wedding_date ? errors.wedding_date[0] : ''
-                        "
+                        :error="errors.wedding_date ? errors.wedding_date[0] : ''"
                     />
 
                     <FileField  

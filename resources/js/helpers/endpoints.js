@@ -2,6 +2,7 @@ export function endpoints() {
     return {
         login: "/auth/login",
         createUser: "/auth/register",
+        updateUser: "/auth/user",
         refreshToken: "/auth/refresh",
         logout: "/auth/logout",
         getCategories: "/email-categories",

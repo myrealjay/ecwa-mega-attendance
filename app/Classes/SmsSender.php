@@ -34,6 +34,8 @@ class SmsSender
         Log::info('Sending SMS to '.$phones);
 
         $response = Http::post(config('services.bulksmsnigeria.url'), $data)->json();
+
+        Log::info($response);
     }
 
     protected function formatNumbers(array $numbers) : array
