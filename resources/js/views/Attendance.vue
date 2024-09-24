@@ -118,6 +118,7 @@
 <style>
 .attendance {
     padding-top:30px;
+    overflow: auto;
 }
 .grid-container {
     display: grid;

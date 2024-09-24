@@ -272,6 +272,7 @@ export default {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 10px;
+    overflow: auto;
 }
 .head {
     text-align: center;

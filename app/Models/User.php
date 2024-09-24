@@ -79,6 +79,30 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         
     }
 
+     /**
+     * Get the user's dob.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function dob() : Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date('Y-m-d', strtotime($value)),
+        );
+    }
+
+    /**
+     * Get the user's wedding date.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function weddingDate() : Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => date('Y-m-d', strtotime($value)),
+        );
+    }
+
     /**
      * Get the user's first name.
      *

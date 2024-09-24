@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'auth'], function () {
     Route::post('login', [AuthController::class, 'login'])->name('login');
     Route::post('register', [AuthController::class, 'register'])->middleware('auth:sanctum')->name('register');
+    Route::put('user/{id}', [AuthController::class, 'update'])->middleware('auth:sanctum')->name('updateUser');
     Route::post('resetlink', [AuthController::class, 'sendResetLink']);
     Route::get('/reset-password/{token}', function ($token) {
         return Redirect::away('/auth/change-password/'.$token);

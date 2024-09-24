@@ -22,7 +22,7 @@ class FollowUp
         $this->today = date('Y-m-d');
     }
 
-    public function checkUpOnAbsentPeople()
+    public function    checkUpOnAbsentPeople()
     {
         $category = EmailCategory::find(2);
 
@@ -43,7 +43,6 @@ class FollowUp
         
         foreach($absentPeople as $absentPerson) {
             if ($smsTemplate) {
-                Log::info('Sending text messages to absent people');
                 try {
                     $smsSender->send([$absentPerson->phone_number], $smsTemplate, $absentPerson);
                 } catch(\Exception $e) {
@@ -52,7 +51,6 @@ class FollowUp
             }
 
             if ($template) {
-                Log::info('Sending emails to absent people');
                 try {
                     Mail::to($absentPerson->email)->send(new FollowUpMail($absentPerson, $template, 'Absent From Service'));
                 } catch(\Exception $e) {
