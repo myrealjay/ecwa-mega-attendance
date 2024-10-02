@@ -129,6 +129,12 @@ class FollowUp
         $celebrantCategory = EmailCategory::find(4);
         $birthdayCategory = EmailCategory::find(3);
 
+        if (count($celebrants)) {
+            Log::info('Sending birthday messages for '. json_encode($celebrants->pluck('emails')));
+        } else {
+            Log::info('No one is celebrating birthday today');
+        }
+
         $this->sendCelebrationEmails(
             $celebrants, 
             $celebrantCategory, 
