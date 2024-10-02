@@ -211,10 +211,12 @@ class FollowUp
                         return !empty($email);
                     })->values()->toArray();
 
-                    try {
-                        Mail::to($emails)->send(new FollowUpMail($celebrant, $birthdayTemplate, $subject));
-                    } catch(\Exception $e) {
-                        Log::error($e);
+                    foreach($emails as $email) {
+                        try {
+                            Mail::to($email)->send(new FollowUpMail($celebrant, $birthdayTemplate, $subject));
+                        } catch(\Exception $e) {
+                            Log::error($e);
+                        }
                     }
                 }
 
