@@ -34,5 +34,7 @@ class BirthdayCommand extends Command
         $followUp = new FollowUp();
         $followUp->celebrateBirthday();
         $followUp->celebrateAnniversary();
+
+        Log::info('Birthday crone ended');
     }
 }
