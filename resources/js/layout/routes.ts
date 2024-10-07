@@ -32,8 +32,20 @@ export function sideBarRoutes() {
         },
         {
             title: "Follow-up Committee",
-            icon: "mdi mdi-marker-check",
+            icon: "mdi mdi-account-multiple",
             name: "committee",
+            roles: ["Super Admin", "Admin"],
+        },
+        {
+            title: "Admins",
+            icon: "mdi mdi-account",
+            name: "admins",
+            roles: ["Super Admin", "Admin"],
+        },
+        {
+            title: "Custom Messages",
+            icon: "mdi mdi-email",
+            name: "custom-messages",
             roles: ["Super Admin", "Admin"],
         },
     ];

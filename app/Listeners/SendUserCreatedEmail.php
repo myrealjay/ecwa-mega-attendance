@@ -12,10 +12,12 @@ use Illuminate\Queue\InteractsWithQueue;
 class SendUserCreatedEmail
 {
     protected User $user;
+    protected ?string $password;
 
     public function handle(UserCreated $event)
     {
         $this->user = $event->user;
+        $this->password = $event->password;
         $this->sendEmail();
     }
 
@@ -23,7 +25,7 @@ class SendUserCreatedEmail
     {
         if ($this->user instanceof MustVerifyEmail && ! $this->user->hasVerifiedEmail()) {
             try {
-                $this->user->sendEmailVerificationNotification();
+                $this->user->sendEmailVerification($this->password);
             }catch(\Exception $exception) {
                 logger($exception);
             }

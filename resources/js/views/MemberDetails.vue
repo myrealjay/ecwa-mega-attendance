@@ -20,6 +20,14 @@
             <DateTimeField label="Wedding Date" v-model="contact.wedding_date" 
             :error="errors.wedding_date ? errors.wedding_date[0] : ''"/>
 
+            <SingleSelect
+                :options="gender"
+                label="Gender"
+                custom_value="name"
+                v-model="contact.gender"
+                text="name"
+            ></SingleSelect>
+
             <div class="picture">
                 <img v-if="contact.picture" :src="contact.picture" width="400" />
             </div>
@@ -38,14 +46,19 @@
 import TextField from "../components/TextField.vue";
 import DateTimeField from "../components/DateTimeField.vue";
 import Button from "../components/Button.vue";
+import SingleSelect from "../components/SingleSelect.vue";
 
 export default {
-    components:{TextField, DateTimeField, Button},
+    components:{TextField, DateTimeField, Button, SingleSelect},
     props: ["id"],
     data() {
         return {
             contact: {},
             errors: {},
+            gender:[
+                {name: 'Male'},
+                {name: 'Female'}
+            ],
         };
     },
     created() {

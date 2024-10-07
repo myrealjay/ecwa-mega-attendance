@@ -9,6 +9,15 @@ use Illuminate\Support\Facades\Log;
 
 class SmsSender
 {
+    /**
+     * Send message with template.
+     *
+     * @param array $phoneNumbers
+     * @param SmsTemplate $template
+     * @param User $user
+     * 
+     * @return void
+     */
     public function send($phoneNumbers = [], SmsTemplate $template , User $user) : void
     {
         $body = (new TemplateParser())->parse($template->template, $user);
@@ -27,6 +36,42 @@ class SmsSender
             'to' => $phones,
             "gateway" => "direct-refund",
             'body' => $body,
+            "customer_reference" => $sms->id,
+            'callback_url' => 'https://webhook.site/4abdd5cc-5128-45a8-9f77-bb0ce80213f9' //config('app.url')."/sms"
+        ];
+
+        Log::info('Sending SMS to '.$phones);
+
+        $response = Http::post(config('services.bulksmsnigeria.url'), $data)->json();
+
+        Log::info($response);
+    }
+
+    /**
+     * Send message without template.
+     *
+     * @param array $phoneNumbers
+     * @param string $template
+     * 
+     * @return void
+     */
+    public function sendWithoutTemplate($phoneNumbers = [], string $template) : void
+    {
+        $phoneNumbers = $this->formatNumbers($phoneNumbers);
+        $phones = rtrim(implode(",", $phoneNumbers), ',');
+
+        $sms = SmsMessage::create([
+            'phone_number' => $phones,
+            'status' => 'Pending',
+            'content' => $template
+        ]);
+        
+        $data = [
+            'api_token' => config('services.bulksmsnigeria.api_token'),
+            'from' => 'ECWAMEGA',
+            'to' => $phones,
+            "gateway" => "direct-refund",
+            'body' => $template,
             "customer_reference" => $sms->id,
             'callback_url' => 'https://webhook.site/4abdd5cc-5128-45a8-9f77-bb0ce80213f9' //config('app.url')."/sms"
         ];

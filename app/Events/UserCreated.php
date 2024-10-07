@@ -16,14 +16,16 @@ class UserCreated
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public User $user;
+    public ?string $password;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(User $user, ?string $password = null)
     {
         $this->user = $user;
+        $this->password = $password;
     }
 }

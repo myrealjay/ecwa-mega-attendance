@@ -16,13 +16,19 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $details = ['first_name' => 'Super', 'last_name' => 'User', 'email' => 'superadmin@ecwa.com'];
+        $details = ['first_name' => 'Super', 'last_name' => 'User', 'email' => 'superadmin@ecwa.com', 'email_verified_at' => now()];
         $updateDetails = $details;
         $updateDetails['password'] = bcrypt('mega@itdehappen');
 
-        $user = User::firstOrCreate($details, $updateDetails);
-        if (!$user->email_verified_at) {
-            $user->update(['email_verified_at' => now()]);
+        $role = Role::where('name', 'Super Admin')->first();
+
+        $user = User::whereHas('roles', function($query) use($role) {
+            return $query->where('role_id', $role->id);
+        })->first();
+
+        if (!$user) {
+            $user = User::create($updateDetails);
+            $user->roles()->sync($role->id);
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Mail\VerifyEmail;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -34,6 +35,17 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
         'password',
         'remember_token',
     ];
+
+    /**
+     * Send the email verification notification.
+     *
+     * @param string $password
+     * @return void
+     */
+    public function sendEmailVerification(string $password)
+    {
+        $this->notify(new VerifyEmail($this, $password));
+    }
 
     /**
      * The attributes that should be cast.
@@ -99,7 +111,7 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     protected function weddingDate() : Attribute
     {
         return Attribute::make(
-            get: fn ($value) => date('Y-m-d', strtotime($value)),
+            get: fn ($value) => $value ? date('Y-m-d', strtotime($value)) : null,
         );
     }
 

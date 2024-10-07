@@ -27,7 +27,7 @@ const childRoutes = [
         component: () => import("../views/Attendance.vue"),
     },
     {
-        path: "/members/:id",
+        path: "members/:id",
         name: "member",
         component: () => import("../views/MemberDetails.vue"),
         props: true,
@@ -36,6 +36,16 @@ const childRoutes = [
         path: "/committee",
         name: "committee",
         component: () => import("../views/FollowUpCommittee.vue")
+    },
+    {
+        path: "admins",
+        name: "admins",
+        component: () => import("../views/Admins.vue")
+    },
+    {
+        path: "custom-messages",
+        name: "custom-messages",
+        component: () => import("../views/Emails.vue")
     },
 ];
 
