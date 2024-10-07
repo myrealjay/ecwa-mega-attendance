@@ -24,6 +24,11 @@ export function endpoints() {
         userCount: "/users/count",
         totalPresent: "/attendance/total-present",
         totalAbsent: "/attendance/total-absent",
-        recipients: "/recipients"
+        recipients: "/recipients",
+        addAdmin: "/users",
+        fetchRoles:'/users/roles',
+        fetchAdmins: '/users/admins',
+        changePassword: '/users/change-password',
+        sendCustomEmails: '/send-custom-messages'
     };
 }

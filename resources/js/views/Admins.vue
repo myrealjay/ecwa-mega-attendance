@@ -2,13 +2,13 @@
     <div>
         <div class="button-container">
             <Button
-                text="ADD MEMBER"
+                text="ADD ADMIN"
                 color="primary"
                 icon="mdi mdi-plus-circle"
                 @buttonClicked="showRegisterModal()"
             ></Button>
         </div>
-        <h2>LIST OF ALL CHURCH MEMBER</h2>
+        <h2>LIST OF ALL ADMINS</h2>
         <div class="search-items">
             <input
                 type="text"
@@ -28,10 +28,8 @@
             <thead>
                 <tr>
                     <th @click="sortBy('first_name')">Name</th>
-                    <th @click="sortBy('phone_number')">Phone Number</th>
                     <th @click="sortBy('email')">Email</th>
-                    <th @click="sortBy('address')">Address</th>
-                    <th @click="sortBy('dob')">Date of Birth</th>
+                    <th @click="sortBy('address')">Roles</th>
                 </tr>
             </thead>
             <tbody>
@@ -42,10 +40,8 @@
                     class="detail-click"
                 >
                     <td>{{ contact.name }}</td>
-                    <td>{{ contact.phone_number }}</td>
                     <td>{{ contact.email }}</td>
-                    <td>{{ contact.address }}</td>
-                    <td>{{ formatDate(contact.dob, true) }}</td>
+                    <td><div class="btn btn-info" v-for="role in contact.roles">{{ role.name }}</div></td>
                 </tr>
             </tbody>
         </table>
@@ -60,7 +56,7 @@
 
         <Modal
             id="registerModal"
-            title="Register Church Member"
+            title="Add Admin"
             :open="registerModalOpen"
             @closed="registerModalOpen = false"
             :large="false"
@@ -78,18 +74,6 @@
                         v-model="form.last_name"
                         :error="errors.last_name ? errors.last_name[0] : ''"
                     />
-                    <TextField
-                        label="Phone Number"
-                        v-model="form.phone_number"
-                        :error="
-                            errors.phone_number ? errors.phone_number[0] : ''
-                        "
-                    />
-                    <TextField
-                        label="Home Address"
-                        v-model="form.address"
-                        :error="errors.address ? errors.address[0] : ''"
-                    />
                     <EmailField
                         label="Email"
                         v-model="form.email"
@@ -103,24 +87,13 @@
                         text="name"
                     ></SingleSelect>
 
-                    <DateTimeField
-                        label="DOB"
-                        v-model="form.dob"
-                        :error="errors.dob ? errors.dob[0] : ''"
-                    />
-
-                    <DateTimeField
-                        label="Wedding Date"
-                        v-model="form.wedding_date"
-                        :error="errors.wedding_date ? errors.wedding_date[0] : ''"
-                    />
-
-                    <FileField  
-                        v-model="form.picture"
-                        :error="
-                            errors.picture ? errors.picture[0] : ''
-                        " 
-                    />
+                    <SingleSelect
+                        :options="roles"
+                        label="Role"
+                        custom_value="name"
+                        v-model="form.role"
+                        text="name"
+                    ></SingleSelect>
                 </form>
             </div>
             <template #buttons>
@@ -142,7 +115,6 @@ import TextField from "../components/TextField.vue";
 import EmailField from "../components/EmailField.vue";
 import DateTimeField from "../components/DateTimeField.vue";
 import Pagination from "../components/Pagination.vue";
-import { mapState } from "vuex";
 import FileField from "../components/FileField.vue"
 import SingleSelect from "../components/SingleSelect.vue";
 export default {
@@ -158,12 +130,8 @@ export default {
                 first_name: "",
                 last_name: "",
                 email: "",
-                address: "",
-                dob: "",
-                phone_number: "",
-                wedding_date: "",
-                picture:"",
-                gender: ""
+                gender: "",
+                role:''
             },
             errors: {},
             registerModalOpen: false,
@@ -172,6 +140,7 @@ export default {
             lengthData:[
                 5,10,20,30,40,50,100
             ],
+            roles:[],
             tableData:{
                 search:'',
                 currentPage:1,
@@ -186,6 +155,13 @@ export default {
         };
     },
     mounted() {
+
+        this.makeRequest('GET', this.endpoints.fetchRoles).then(response => {
+            this.roles = response.data.data;
+        }).catch(error => {
+            console.log(error.response);
+        })
+
         this.fetchData();
     },
     computed: {
@@ -207,7 +183,7 @@ export default {
             this.tableData.currentPage = page;
             this.fetchData();
         },
-        fetchData(url = this.endpoints.fetchUsers) {
+        fetchData(url = this.endpoints.fetchAdmins) {
             this.makeRequest('GET', `${url}?page=${this.tableData.currentPage}`, this.tableData).then(response=> {
                 let data = response.data.data;
                 this.tableData.currentPage = data.current_page;
@@ -233,20 +209,22 @@ export default {
                 formData.append(item, this.form[item]);
             }
             this.showLoader();
-            this.makeRequest("POST", this.endpoints.createUser, {}, formData)
+            this.makeRequest("POST", this.endpoints.addAdmin, {}, formData)
                 .then((response) => {
-                    this.sweetAlert().success("Member Added successfully");
-                    this.registerModalOpen = false;
-                    this.form = {
-                        first_name: "",
-                        last_name: "",
-                        email: "",
-                        address: "",
-                        dob: "",
-                        phone_number: "",
-                        wedding_date: "",
-                    };
-
+                    if (response.data.status == 200) {
+                        this.sweetAlert().success("Admin Added successfully");
+                        this.registerModalOpen = false;
+                        this.form = {
+                            first_name: "",
+                            last_name: "",
+                            email: "",
+                            gender:'',
+                            role:''
+                        };
+                    } else {
+                        this.sweetAlert().error(response.data.message);
+                    }
+                    
                     this.fetchData();
                 })
                 .catch((error) => {
@@ -258,7 +236,7 @@ export default {
                 });
         },
         fetchContactDetails(contactId) {
-            this.$router.push({ path: `members/${contactId}` });
+            //this.$router.push({ path: `/admins/${contactId}` });
         },
     },
     components: {

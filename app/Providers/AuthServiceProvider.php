@@ -29,14 +29,6 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        VerifyEmail::toMailUsing(function ($notifiable, $url) {
-            return (new MailMessage)
-                ->greeting('Hello '. $notifiable->first_name .'!')
-                ->subject('Verify Email Address')
-                ->line('Kindly click the button below to verify your email address.')
-                ->action('Verify Email Address', $url);
-        });
-
         Gate::define('create-question', function (User $user) {
             return $user->roles()->whereIn('roles.name', ['Super Admin', 'Admin'])->exists();
         });

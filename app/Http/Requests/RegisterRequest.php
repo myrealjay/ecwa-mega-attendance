@@ -30,6 +30,7 @@ class RegisterRequest extends FormRequest
             'phone_number' => ['nullable','string','max:20','regex:/^[0-9\+]+$/','unique:users,phone_number'],
             'address' => ['nullable','string','max:255'],
             'dob' => ['required', 'date'],
+            'gender' => ['required', 'in:Male,Female'],
             'occupation' => ['nullable', 'string', 'max:255'],
             'picture' => ['nullable', 'image', 'mimes:jpg,jpeg,png','max:2048'],
             'wedding_date' => ['nullable', 'date']
