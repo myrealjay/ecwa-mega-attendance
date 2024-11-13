@@ -103,7 +103,7 @@ const dataFetched = computed(() => {
 <style scoped>
 .hero {
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.3);
     width: 100%;
     display: flex;
     justify-content: center; /* Horizontal centering */
@@ -246,6 +246,14 @@ const dataFetched = computed(() => {
         font-size: 30px;
         font-weight: bolder;
         color:#fff;
+    }
+
+    .container-fluid {
+        background: url(../assets/images/church.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: left;
+        background-attachment: fixed;
     }
 }
 </style>
