@@ -7,6 +7,11 @@ const childRoutes = [
         component: Dashboard,
     },
     {
+        path: "events",
+        name: "events",
+        component: () => import("../views/Events.vue")
+    },
+    {
         path: "email-templates",
         name: "email-templates",
         component: () => import("../views/EmailTemplate.vue"),

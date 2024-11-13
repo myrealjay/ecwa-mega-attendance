@@ -52,7 +52,16 @@
                                     <div
                                         class="my-2 d-flex justify-content-between align-items-center"
                                     >
-                                        <div class="form-check"></div>
+                                        <div class="form-check"><a
+                                            href="#"
+                                            @click.prevent="
+                                                $router.push({
+                                                    path: '/',
+                                                })
+                                            "
+                                            class="auth-link text-black"
+                                            >Home</a
+                                        ></div>
                                         <a
                                             href="#"
                                             @click.prevent="
@@ -65,21 +74,7 @@
                                         >
                                     </div>
 
-                                    <div
-                                        class="text-center mt-4 font-weight-dark"
-                                    >
-                                        Don't have an account?
-                                        <a
-                                            @click.prevent="
-                                                $router.push({
-                                                    name: 'register',
-                                                })
-                                            "
-                                            href=""
-                                            class="text-primary"
-                                            >Register</a
-                                        >
-                                    </div>
+
                                 </form>
                             </div>
                         </div>
@@ -101,6 +96,8 @@ export default {
                     "Kindly click on the link sent to your email to verify your email";
             }
         }
+
+        console.log(this.$store.state)
     },
     data() {
         return {

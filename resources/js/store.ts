@@ -21,7 +21,7 @@ const store = createStore({
         },
         logout(state) {
             sessionStorage.removeItem("user");
-            window.location = "/";
+            window.location = "/login";
         },
         fetchQuizCategory(state, payload) {
             state.currentUser.categories = payload;

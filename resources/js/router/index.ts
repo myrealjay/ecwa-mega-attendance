@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
-import Register from "../views/Register.vue";
 import { homeChildren } from "./homeChildren";
 import NotFound from "../views/NotFound.vue";
 import { appStore } from "../store";
@@ -9,7 +8,7 @@ import { sideBarRoutes } from "@/layout/routes";
 import { otherRoutes } from "@/layout/otherRoutes";
 import ForgotPassword from "../views/ForgotPassword.vue";
 import ResetPassword from "../views/ResetPassword.vue";
-import AddMessage from "../views/AddMessage.vue";
+import Landing from '../views/Landing.vue';
 
 const store = appStore();
 
@@ -18,6 +17,11 @@ const router = createRouter({
     routes: [
         {
             path: "/",
+            name: "landing",
+            component: Landing
+        },
+        {
+            path: "/login",
             name: "login",
             component: Login,
             beforeEnter: async (to, from, next) => {
@@ -29,7 +33,6 @@ const router = createRouter({
                 }
             },
         },
-
         {
             path: "/forgot-password",
             name: "forgot-password",

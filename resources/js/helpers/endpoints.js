@@ -29,6 +29,9 @@ export function endpoints() {
         fetchRoles:'/users/roles',
         fetchAdmins: '/users/admins',
         changePassword: '/users/change-password',
-        sendCustomEmails: '/send-custom-messages'
+        sendCustomEmails: '/send-custom-messages',
+        uploadEvent:'/events',
+        fetchEvent:'/events',
+        deleteEvent:'/events/remove'
     };
 }

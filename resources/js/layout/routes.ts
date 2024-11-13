@@ -7,6 +7,12 @@ export function sideBarRoutes() {
             roles: ["User", "Super Admin", "Admin"],
         },
         {
+            title: "Events",
+            icon: "mdi mdi-calendar",
+            name: "events",
+            roles: ["Super Admin", "Admin"],
+        },
+        {
             title: "Email Templates",
             icon: "mdi mdi-email",
             name: "email-templates",

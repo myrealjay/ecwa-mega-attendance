@@ -11,35 +11,35 @@
     "file": "assets/Pagination-32510304.css",
     "src": "Pagination.css"
   },
-  "_Editor-449788a7.js": {
-    "file": "assets/Editor-449788a7.js",
+  "_Editor-4371950f.js": {
+    "file": "assets/Editor-4371950f.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_FileField-db8e0caa.js": {
+  "_FileField-7f728b07.js": {
     "css": [
       "assets/FileField-113fa4cf.css"
     ],
-    "file": "assets/FileField-db8e0caa.js",
+    "file": "assets/FileField-7f728b07.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_Message-25858db7.js": {
+  "_Message-63ddaaad.js": {
     "css": [
       "assets/Message-c9b9b59f.css"
     ],
-    "file": "assets/Message-25858db7.js",
+    "file": "assets/Message-63ddaaad.js",
     "imports": [
       "resources/js/app.js"
     ]
   },
-  "_Pagination-733891e9.js": {
+  "_Pagination-07995184.js": {
     "css": [
       "assets/Pagination-32510304.css"
     ],
-    "file": "assets/Pagination-733891e9.js",
+    "file": "assets/Pagination-07995184.js",
     "imports": [
       "resources/js/app.js"
     ]
@@ -50,7 +50,7 @@
     "src": "resources/css/app.css"
   },
   "resources/js/app.css": {
-    "file": "assets/app-eb71a186.css",
+    "file": "assets/app-3e3ea8a0.css",
     "src": "resources/js/app.css"
   },
   "resources/js/app.js": {
@@ -62,14 +62,15 @@
       "assets/face4-291ca278.jpg",
       "assets/face5-be43aff5.jpg",
       "assets/face6-c87145a7.jpg",
-      "assets/church-f440b689.jpg",
+      "assets/church-bb24031a.jpg",
       "assets/ecwalogo-b71aa38a.jpg",
       "assets/ecwa-8bc1856f.png"
     ],
     "css": [
-      "assets/app-eb71a186.css"
+      "assets/app-3e3ea8a0.css"
     ],
     "dynamicImports": [
+      "resources/js/views/Events.vue",
       "resources/js/views/EmailTemplate.vue",
       "resources/js/views/SmsTemplate.vue",
       "resources/js/views/Members.vue",
@@ -79,12 +80,12 @@
       "resources/js/views/Admins.vue",
       "resources/js/views/Emails.vue"
     ],
-    "file": "assets/app-53bd4f0c.js",
+    "file": "assets/app-235f6814.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   },
   "resources/js/assets/images/church.jpg": {
-    "file": "assets/church-f440b689.jpg",
+    "file": "assets/church-bb24031a.jpg",
     "src": "resources/js/assets/images/church.jpg"
   },
   "resources/js/assets/images/ecwa.png": {
@@ -124,18 +125,18 @@
     "src": "resources/js/assets/images/megalogo.jpg"
   },
   "resources/js/views/Admins.css": {
-    "file": "assets/Members-c1ccf9e8.css",
+    "file": "assets/Events-c1ccf9e8.css",
     "src": "resources/js/views/Admins.css"
   },
   "resources/js/views/Admins.vue": {
     "css": [
-      "assets/Members-c1ccf9e8.css"
+      "assets/Events-c1ccf9e8.css"
     ],
-    "file": "assets/Admins-6265f487.js",
+    "file": "assets/Admins-3b5565bd.js",
     "imports": [
       "resources/js/app.js",
-      "_Pagination-733891e9.js",
-      "_FileField-db8e0caa.js"
+      "_Pagination-07995184.js",
+      "_FileField-7f728b07.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/Admins.vue"
@@ -148,7 +149,7 @@
     "css": [
       "assets/Attendance-6e3c7401.css"
     ],
-    "file": "assets/Attendance-ce050096.js",
+    "file": "assets/Attendance-7a51db4b.js",
     "imports": [
       "resources/js/app.js"
     ],
@@ -163,12 +164,12 @@
     "css": [
       "assets/EmailTemplate-a9200428.css"
     ],
-    "file": "assets/EmailTemplate-d602944a.js",
+    "file": "assets/EmailTemplate-f728d045.js",
     "imports": [
       "resources/js/app.js",
-      "_Message-25858db7.js",
-      "_Editor-449788a7.js",
-      "_Pagination-733891e9.js"
+      "_Message-63ddaaad.js",
+      "_Editor-4371950f.js",
+      "_Pagination-07995184.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/EmailTemplate.vue"
@@ -181,13 +182,30 @@
     "css": [
       "assets/EmailTemplate-a9200428.css"
     ],
-    "file": "assets/Emails-14799b7d.js",
+    "file": "assets/Emails-f96d314f.js",
     "imports": [
       "resources/js/app.js",
-      "_Editor-449788a7.js"
+      "_Editor-4371950f.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/Emails.vue"
+  },
+  "resources/js/views/Events.css": {
+    "file": "assets/Events-c1ccf9e8.css",
+    "src": "resources/js/views/Admins.css"
+  },
+  "resources/js/views/Events.vue": {
+    "css": [
+      "assets/Events-c1ccf9e8.css"
+    ],
+    "file": "assets/Events-5e36a487.js",
+    "imports": [
+      "resources/js/app.js",
+      "_Pagination-07995184.js",
+      "_FileField-7f728b07.js"
+    ],
+    "isDynamicEntry": true,
+    "src": "resources/js/views/Events.vue"
   },
   "resources/js/views/FollowUpCommittee.css": {
     "file": "assets/FollowUpCommittee-d81ed004.css",
@@ -197,7 +215,7 @@
     "css": [
       "assets/FollowUpCommittee-d81ed004.css"
     ],
-    "file": "assets/FollowUpCommittee-14899e80.js",
+    "file": "assets/FollowUpCommittee-f7accfac.js",
     "imports": [
       "resources/js/app.js"
     ],
@@ -212,7 +230,7 @@
     "css": [
       "assets/MemberDetails-38abd3d0.css"
     ],
-    "file": "assets/MemberDetails-e5a4281e.js",
+    "file": "assets/MemberDetails-1233fd13.js",
     "imports": [
       "resources/js/app.js"
     ],
@@ -220,18 +238,18 @@
     "src": "resources/js/views/MemberDetails.vue"
   },
   "resources/js/views/Members.css": {
-    "file": "assets/Members-c1ccf9e8.css",
+    "file": "assets/Events-c1ccf9e8.css",
     "src": "resources/js/views/Admins.css"
   },
   "resources/js/views/Members.vue": {
     "css": [
-      "assets/Members-c1ccf9e8.css"
+      "assets/Events-c1ccf9e8.css"
     ],
-    "file": "assets/Members-c2ef452c.js",
+    "file": "assets/Members-58ef1182.js",
     "imports": [
       "resources/js/app.js",
-      "_Pagination-733891e9.js",
-      "_FileField-db8e0caa.js"
+      "_Pagination-07995184.js",
+      "_FileField-7f728b07.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/Members.vue"
@@ -244,11 +262,11 @@
     "css": [
       "assets/SmsTemplate-d40543b0.css"
     ],
-    "file": "assets/SmsTemplate-c571d847.js",
+    "file": "assets/SmsTemplate-57341114.js",
     "imports": [
       "resources/js/app.js",
-      "_Message-25858db7.js",
-      "_Pagination-733891e9.js"
+      "_Message-63ddaaad.js",
+      "_Pagination-07995184.js"
     ],
     "isDynamicEntry": true,
     "src": "resources/js/views/SmsTemplate.vue"
