@@ -4,6 +4,8 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>ECWA MEGA CHAPEL GBAGADA</title>
+        <meta name="description" content="This is an application that enables churches do follow-up on their members. It takes attendance and send email/SMS notifications to members who are present/absent for a given service withina  set time. The application also sends birthday email notifications to members. Furthermore, admin can create events (programs) which will show up as carousel on the home page. Admin also configures email templats for different categories of emails." />
+        <meta name="keywords" content="follow-up, church, ecwa mega gbagada, ecwa mega, birthday app, followup app, attendance" />
 
         <link rel="icon" href="{{ asset('favicon.ico?v=1') }}" type="image/x-icon"/>
         <link rel="stylesheet" href="{{ asset('assets/vendors/feather/feather.css') }}">
