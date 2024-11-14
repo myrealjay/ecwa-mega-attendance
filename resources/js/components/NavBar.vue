@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/">
+            <a class="navbar-brand" href="#hero" @click.prevent="scrollToSection('hero')">
                 <img
                     src="../assets/images/megalogo.jpg"
                     alt="logo"
@@ -15,7 +15,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                        <a class="nav-link active" aria-current="page" href="#hero" @click.prevent="scrollToSection('hero')">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#events"  @click.prevent="scrollToSection('events')">Events</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/login">Login</a>
@@ -25,6 +28,18 @@
         </div>
     </nav>
 </template>
+
+<script setup>
+    function scrollToSection(id) {
+    const section = document.getElementById(id);
+    if (section) {
+        section.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+        });
+    }
+    }
+</script>
 
 <style scoped>
     .bg-primary {

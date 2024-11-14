@@ -2,7 +2,7 @@
     <div class="container-scroller">
         <div class="container-fluid full-page-wrapper">
             <NavBar />
-            <div class="hero">
+            <div class="hero" id="hero">
                 <Transition name="fade" mode="out-in">
                     <h1 :key="bannerText">{{ bannerText }}</h1>
                 </Transition>
@@ -17,7 +17,7 @@
                     <div :key="displayTest" :style="{ color: color }" v-text="displayTest"></div>
                 </transition>
             </div>
-            <div class="carosel events">
+            <div class="carosel events" id="events">
                 <h4>EVENTS</h4>
                 <div v-if="dataFetched">
                     <Carousel id="events" ref="programs" :imageUrls="events" />
