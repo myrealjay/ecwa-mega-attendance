@@ -20,7 +20,7 @@
             <div class="carosel events" id="events">
                 <h4>EVENTS</h4>
                 <div v-if="dataFetched">
-                    <Carousel id="events" ref="programs" :imageUrls="events" />
+                    <Carousel id="eventsCarousel" :imageUrls="events" />
                 </div>
             </div>
             <div class="footer">

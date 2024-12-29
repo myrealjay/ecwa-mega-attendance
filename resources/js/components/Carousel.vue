@@ -12,7 +12,7 @@
                     :data-bs-slide-to="i"
                     class="active"
                     aria-current="true"
-                    :aria-label="'image '+i"
+                    :aria-label="`image${id}${i}`"
                 ></button>
             </div>
             <div class="carousel-inner">
